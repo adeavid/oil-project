@@ -156,12 +156,12 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
 const departamentos = [
   {
     id: "AMAZONAS",
-    path: "M580,780 L650,750 L720,770 L750,820 L730,880 L670,900 L600,880 L570,830 L580,780 Z",
+    path: "M430,600 L520,580 L600,620 L580,680 L500,700 L430,680 L430,600 Z",
     nombre: "Amazonas",
   },
   {
-    id: "ANTIOQUIA", 
-    path: "M300,400 L350,380 L390,400 L410,370 L380,340 L410,310 L380,280 L340,290 L310,320 L280,310 L250,340 L280,370 L300,400 Z",
+    id: "ANTIOQUIA",
+    path: "M250,280 L300,260 L330,290 L310,320 L280,330 L250,310 L250,280 Z",
     nombre: "Antioquia",
   },
   {
