@@ -23,6 +23,30 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
   const getColor = (departamento: string) => {
     if (!afectaciones[departamento]) return "#f4f4f5"
 
+    const maxBOPD = Math.max(...Object.values(afectaciones).map((a) => a.BOPD))
+    const maxKPCD = Math.max(...Object.values(afectaciones).map((a) => a.KPCD))
+
+    const afectacionBOPD = afectaciones[departamento].BOPD
+    const afectacionKPCD = afectaciones[departamento].KPCD
+
+    if (afectacionBOPD > 0 && afectacionKPCD > 0) {
+      return "#9333EA" // Púrpura para ambos tipos
+    }
+
+    if (afectacionBOPD > 0) {
+      const intensidad = afectacionBOPD / maxBOPD
+      if (intensidad > 0.7) return "#1E40AF"
+      if (intensidad > 0.4) return "#3B82F6"
+      return "#93C5FD"
+    }
+
+    if (afectacionKPCD > 0) {
+      const intensidad = afectacionKPCD / maxKPCD
+      if (intensidad > 0.7) return "#166534"
+      if (intensidad > 0.4) return "#22C55E"
+      return "#86EFAC"
+    }
+
     const maxBOPD = Math.max(...Object.values(afectaciones).map((a) => a.BOPD || 0))
     const maxKPCD = Math.max(...Object.values(afectaciones).map((a) => a.KPCD || 0))
 
@@ -91,10 +115,11 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
                       pressed: { outline: "none" }
                     }}
                     onMouseEnter={() => {
+                      const data = afectaciones[nombre]
                       setSelectedDep({
                         departamento: nombre,
-                        BOPD: afectaciones[nombre]?.BOPD || 0,
-                        KPCD: afectaciones[nombre]?.KPCD || 0,
+                        BOPD: data?.BOPD || 0,
+                        KPCD: data?.KPCD || 0
                       })
                     }}
                     onMouseLeave={() => {
