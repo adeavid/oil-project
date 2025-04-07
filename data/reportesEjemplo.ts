@@ -1,0 +1,538 @@
+import type { Reporte } from "@/types"
+
+// Función para generar fechas específicas
+function crearFecha(año: number, mes: number, dia: number): Date {
+  return new Date(año, mes - 1, dia)
+}
+
+// Datos de ejemplo para la tabla (últimos 10 días: 27 de marzo a 7 de abril de 2025)
+export const reportesEjemplo: Reporte[] = [
+  // 27 de marzo
+  {
+    id: 1,
+    fecha: crearFecha(2025, 3, 27),
+    campo: "Rubiales",
+    tipoNovedad: "Falla mecánica",
+    descripcion: "Falla en bomba principal de extracción",
+    afectacion: 1200,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "META",
+    municipio: "PUERTO GAITÁN",
+    fechaReporte: crearFecha(2025, 3, 27),
+    fechaAfectacion: crearFecha(2025, 3, 27),
+    historial: [
+      {
+        fecha: crearFecha(2025, 3, 27),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+  {
+    id: 2,
+    fecha: crearFecha(2025, 3, 27),
+    campo: "Don Pedro",
+    tipoNovedad: "Comunidades",
+    descripcion: "Bloqueo parcial por comunidades locales",
+    afectacion: 1800,
+    unidad: "KPCD",
+    operador: "CNEOG COLOMBIA SUCURSAL COLOMBIA",
+    departamento: "VICHADA",
+    municipio: "CUMARIBO",
+    fechaReporte: crearFecha(2025, 3, 27),
+    fechaAfectacion: crearFecha(2025, 3, 27),
+    historial: [
+      {
+        fecha: crearFecha(2025, 3, 27),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+
+  // 28 de marzo
+  {
+    id: 3,
+    fecha: crearFecha(2025, 3, 28),
+    campo: "Caño Limón",
+    tipoNovedad: "Suspensión",
+    descripcion: "Suspensión por mantenimiento programado",
+    afectacion: 800,
+    unidad: "BOPD",
+    operador: "OCCIDENTAL DE COLOMBIA",
+    departamento: "ARAUCA",
+    municipio: "ARAUCA",
+    fechaReporte: crearFecha(2025, 3, 28),
+    fechaAfectacion: crearFecha(2025, 3, 28),
+    historial: [
+      {
+        fecha: crearFecha(2025, 3, 28),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+  {
+    id: 4,
+    fecha: crearFecha(2025, 3, 28),
+    campo: "Cusiana",
+    tipoNovedad: "Fuga",
+    descripcion: "Fuga detectada en línea secundaria",
+    afectacion: 150,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "CASANARE",
+    municipio: "TAURAMENA",
+    fechaReporte: crearFecha(2025, 3, 28),
+    fechaAfectacion: crearFecha(2025, 3, 28),
+    historial: [
+      {
+        fecha: crearFecha(2025, 3, 28),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+
+  // 29 de marzo
+  {
+    id: 5,
+    fecha: crearFecha(2025, 3, 29),
+    campo: "Chichimene",
+    tipoNovedad: "Problema eléctrico",
+    descripcion: "Falla en suministro eléctrico",
+    afectacion: 950,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "META",
+    municipio: "ACACÍAS",
+    fechaReporte: crearFecha(2025, 3, 29),
+    fechaAfectacion: crearFecha(2025, 3, 29),
+    historial: [
+      {
+        fecha: crearFecha(2025, 3, 29),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+  {
+    id: 6,
+    fecha: crearFecha(2025, 3, 29),
+    campo: "Don Pedro",
+    tipoNovedad: "Comunidades",
+    descripcion: "Continúa bloqueo por comunidades",
+    afectacion: 2000,
+    unidad: "KPCD",
+    operador: "CNEOG COLOMBIA SUCURSAL COLOMBIA",
+    departamento: "VICHADA",
+    municipio: "CUMARIBO",
+    fechaReporte: crearFecha(2025, 3, 29),
+    fechaAfectacion: crearFecha(2025, 3, 29),
+    historial: [
+      {
+        fecha: crearFecha(2025, 3, 29),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+
+  // 30 de marzo
+  {
+    id: 7,
+    fecha: crearFecha(2025, 3, 30),
+    campo: "Castilla",
+    tipoNovedad: "Mantenimiento",
+    descripcion: "Mantenimiento preventivo de equipos",
+    afectacion: 500,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "META",
+    municipio: "CASTILLA LA NUEVA",
+    fechaReporte: crearFecha(2025, 3, 30),
+    fechaAfectacion: crearFecha(2025, 3, 30),
+    historial: [
+      {
+        fecha: crearFecha(2025, 3, 30),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+  {
+    id: 8,
+    fecha: crearFecha(2025, 3, 30),
+    campo: "Rubiales",
+    tipoNovedad: "Falla mecánica",
+    descripcion: "Continúa falla en sistema de bombeo",
+    afectacion: 1300,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "META",
+    municipio: "PUERTO GAITÁN",
+    fechaReporte: crearFecha(2025, 3, 30),
+    fechaAfectacion: crearFecha(2025, 3, 30),
+    historial: [
+      {
+        fecha: crearFecha(2025, 3, 30),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+
+  // 31 de marzo
+  {
+    id: 9,
+    fecha: crearFecha(2025, 3, 31),
+    campo: "Apiay",
+    tipoNovedad: "Orden público",
+    descripcion: "Problemas de orden público en la zona",
+    afectacion: 300,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "META",
+    municipio: "VILLAVICENCIO",
+    fechaReporte: crearFecha(2025, 3, 31),
+    fechaAfectacion: crearFecha(2025, 3, 31),
+    historial: [
+      {
+        fecha: crearFecha(2025, 3, 31),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+  {
+    id: 10,
+    fecha: crearFecha(2025, 3, 31),
+    campo: "Don Pedro",
+    tipoNovedad: "Comunidades",
+    descripcion: "Tercer día de bloqueo por comunidades",
+    afectacion: 2200,
+    unidad: "KPCD",
+    operador: "CNEOG COLOMBIA SUCURSAL COLOMBIA",
+    departamento: "VICHADA",
+    municipio: "CUMARIBO",
+    fechaReporte: crearFecha(2025, 3, 31),
+    fechaAfectacion: crearFecha(2025, 3, 31),
+    historial: [
+      {
+        fecha: crearFecha(2025, 3, 31),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+
+  // 1 de abril
+  {
+    id: 11,
+    fecha: crearFecha(2025, 4, 1),
+    campo: "La Cira-Infantas",
+    tipoNovedad: "Paro programado",
+    descripcion: "Paro programado para actualización de sistemas",
+    afectacion: 1800,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "SANTANDER",
+    municipio: "BARRANCABERMEJA",
+    fechaReporte: crearFecha(2025, 4, 1),
+    fechaAfectacion: crearFecha(2025, 4, 1),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 1),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+  {
+    id: 12,
+    fecha: crearFecha(2025, 4, 1),
+    campo: "Cusiana",
+    tipoNovedad: "Mantenimiento",
+    descripcion: "Mantenimiento preventivo programado",
+    afectacion: 300,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "CASANARE",
+    municipio: "TAURAMENA",
+    fechaReporte: crearFecha(2025, 4, 1),
+    fechaAfectacion: crearFecha(2025, 4, 1),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 1),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+
+  // 2 de abril
+  {
+    id: 13,
+    fecha: crearFecha(2025, 4, 2),
+    campo: "Caño Limón",
+    tipoNovedad: "Fuga",
+    descripcion: "Fuga menor en línea secundaria",
+    afectacion: 400,
+    unidad: "BOPD",
+    operador: "OCCIDENTAL DE COLOMBIA",
+    departamento: "ARAUCA",
+    municipio: "ARAUCA",
+    fechaReporte: crearFecha(2025, 4, 2),
+    fechaAfectacion: crearFecha(2025, 4, 2),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 2),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+  {
+    id: 14,
+    fecha: crearFecha(2025, 4, 2),
+    campo: "Rubiales",
+    tipoNovedad: "Problema eléctrico",
+    descripcion: "Falla en suministro eléctrico principal",
+    afectacion: 1500,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "META",
+    municipio: "PUERTO GAITÁN",
+    fechaReporte: crearFecha(2025, 4, 2),
+    fechaAfectacion: crearFecha(2025, 4, 2),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 2),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+
+  // 3 de abril
+  {
+    id: 15,
+    fecha: crearFecha(2025, 4, 3),
+    campo: "Chichimene",
+    tipoNovedad: "Falla mecánica",
+    descripcion: "Falla en sistema de bombeo secundario",
+    afectacion: 750,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "META",
+    municipio: "ACACÍAS",
+    fechaReporte: crearFecha(2025, 4, 3),
+    fechaAfectacion: crearFecha(2025, 4, 3),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 3),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+  {
+    id: 16,
+    fecha: crearFecha(2025, 4, 3),
+    campo: "Cusiana",
+    tipoNovedad: "Suspensión",
+    descripcion: "Suspensión temporal por condiciones climáticas",
+    afectacion: 1200,
+    unidad: "KPCD",
+    operador: "ECOPETROL S.A.",
+    departamento: "CASANARE",
+    municipio: "TAURAMENA",
+    fechaReporte: crearFecha(2025, 4, 3),
+    fechaAfectacion: crearFecha(2025, 4, 3),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 3),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+
+  // 4 de abril
+  {
+    id: 17,
+    fecha: crearFecha(2025, 4, 4),
+    campo: "Castilla",
+    tipoNovedad: "Problema eléctrico",
+    descripcion: "Corte de energía en estación principal",
+    afectacion: 850,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "META",
+    municipio: "CASTILLA LA NUEVA",
+    fechaReporte: crearFecha(2025, 4, 4),
+    fechaAfectacion: crearFecha(2025, 4, 4),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 4),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+  {
+    id: 18,
+    fecha: crearFecha(2025, 4, 4),
+    campo: "Don Pedro",
+    tipoNovedad: "Orden público",
+    descripcion: "Nuevos problemas de seguridad en la zona",
+    afectacion: 1900,
+    unidad: "KPCD",
+    operador: "CNEOG COLOMBIA SUCURSAL COLOMBIA",
+    departamento: "VICHADA",
+    municipio: "CUMARIBO",
+    fechaReporte: crearFecha(2025, 4, 4),
+    fechaAfectacion: crearFecha(2025, 4, 4),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 4),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+
+  // 5 de abril
+  {
+    id: 19,
+    fecha: crearFecha(2025, 4, 5),
+    campo: "Rubiales",
+    tipoNovedad: "Mantenimiento",
+    descripcion: "Mantenimiento correctivo tras falla eléctrica",
+    afectacion: 1100,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "META",
+    municipio: "PUERTO GAITÁN",
+    fechaReporte: crearFecha(2025, 4, 5),
+    fechaAfectacion: crearFecha(2025, 4, 5),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 5),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+  {
+    id: 20,
+    fecha: crearFecha(2025, 4, 5),
+    campo: "Caño Limón",
+    tipoNovedad: "Fuga",
+    descripcion: "Nueva fuga detectada en sistema principal",
+    afectacion: 600,
+    unidad: "BOPD",
+    operador: "OCCIDENTAL DE COLOMBIA",
+    departamento: "ARAUCA",
+    municipio: "ARAUCA",
+    fechaReporte: crearFecha(2025, 4, 5),
+    fechaAfectacion: crearFecha(2025, 4, 5),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 5),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+
+  // 6 de abril
+  {
+    id: 21,
+    fecha: crearFecha(2025, 4, 6),
+    campo: "La Cira-Infantas",
+    tipoNovedad: "Falla mecánica",
+    descripcion: "Falla en sistema de compresión",
+    afectacion: 1400,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "SANTANDER",
+    municipio: "BARRANCABERMEJA",
+    fechaReporte: crearFecha(2025, 4, 6),
+    fechaAfectacion: crearFecha(2025, 4, 6),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 6),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+  {
+    id: 22,
+    fecha: crearFecha(2025, 4, 6),
+    campo: "Cusiana",
+    tipoNovedad: "Suspensión",
+    descripcion: "Continúa suspensión por condiciones climáticas",
+    afectacion: 1500,
+    unidad: "KPCD",
+    operador: "ECOPETROL S.A.",
+    departamento: "CASANARE",
+    municipio: "TAURAMENA",
+    fechaReporte: crearFecha(2025, 4, 6),
+    fechaAfectacion: crearFecha(2025, 4, 6),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 6),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+
+  // 7 de abril (hoy)
+  {
+    id: 23,
+    fecha: crearFecha(2025, 4, 7),
+    campo: "Rubiales",
+    tipoNovedad: "Problema eléctrico",
+    descripcion: "Nueva falla en suministro eléctrico",
+    afectacion: 1600,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "META",
+    municipio: "PUERTO GAITÁN",
+    fechaReporte: crearFecha(2025, 4, 7),
+    fechaAfectacion: crearFecha(2025, 4, 7),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 7),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+  {
+    id: 24,
+    fecha: crearFecha(2025, 4, 7),
+    campo: "Don Pedro",
+    tipoNovedad: "Orden público",
+    descripcion: "Problemas de seguridad en la zona",
+    afectacion: 2300,
+    unidad: "KPCD",
+    operador: "CNEOG COLOMBIA SUCURSAL COLOMBIA",
+    departamento: "VICHADA",
+    municipio: "CUMARIBO",
+    fechaReporte: crearFecha(2025, 4, 7),
+    fechaAfectacion: crearFecha(2025, 4, 7),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 7),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+]
+
