@@ -19,15 +19,15 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
     KPCD: number
   } | null>(null)
   
-  const [position, setPosition] = useState({ coordinates: [-74, 4.5], zoom: 4 })
+  const [position, setPosition] = useState({ coordinates: [-74, 4.5], zoom: 8 })
 
   const handleZoomIn = useCallback(() => {
-    if (position.zoom >= 8) return
+    if (position.zoom >= 16) return
     setPosition(pos => ({ ...pos, zoom: pos.zoom * 1.2 }))
   }, [position.zoom])
 
   const handleZoomOut = useCallback(() => {
-    if (position.zoom <= 1) return
+    if (position.zoom <= 2) return
     setPosition(pos => ({ ...pos, zoom: pos.zoom / 1.2 }))
   }, [position.zoom])
 
@@ -80,7 +80,7 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
               zoom={position.zoom}
               center={position.coordinates as [number, number]}
               onMoveEnd={handleMoveEnd}
-              maxZoom={8}
+              maxZoom={16}
             >
               <Geographies geography={coJson}>
             {({ geographies }) =>
