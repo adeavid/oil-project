@@ -10,7 +10,21 @@ interface MapaTabProps {
   umbralAfectacion: number
 }
 
-export function MapaTab({ afectacionesPorDepartamento, umbralAfectacion }: MapaTabProps) {
+// Datos de ejemplo para el mapa
+const datosEjemplo: Record<string, AfectacionesDepartamento> = {
+  "META": { BOPD: 2500, KPCD: 1200 },
+  "CASANARE": { BOPD: 1800, KPCD: 800 },
+  "SANTANDER": { BOPD: 1200, KPCD: 0 },
+  "ARAUCA": { BOPD: 900, KPCD: 1500 },
+  "VICHADA": { BOPD: 0, KPCD: 2000 },
+  "BOYACÁ": { BOPD: 600, KPCD: 300 },
+  "TOLIMA": { BOPD: 400, KPCD: 0 },
+  "HUILA": { BOPD: 300, KPCD: 400 },
+  "PUTUMAYO": { BOPD: 700, KPCD: 600 },
+  "ANTIOQUIA": { BOPD: 200, KPCD: 900 }
+}
+
+export function MapaTab({ afectacionesPorDepartamento = datosEjemplo, umbralAfectacion }: MapaTabProps) {
   return (
     <div className="space-y-6">
       <Card className="overflow-hidden">

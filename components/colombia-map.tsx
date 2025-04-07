@@ -24,11 +24,11 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
   const getColor = (departamento: string) => {
     if (!afectaciones[departamento]) return "#f4f4f5"
 
-    const maxBOPD = Math.max(...Object.values(afectaciones).map((a) => a.BOPD))
-    const maxKPCD = Math.max(...Object.values(afectaciones).map((a) => a.KPCD))
+    const maxBOPD = Math.max(...Object.values(afectaciones).map((a) => a.BOPD || 0))
+    const maxKPCD = Math.max(...Object.values(afectaciones).map((a) => a.KPCD || 0))
 
-    const afectacionBOPD = afectaciones[departamento].BOPD
-    const afectacionKPCD = afectaciones[departamento].KPCD
+    const afectacionBOPD = afectaciones[departamento].BOPD || 0
+    const afectacionKPCD = afectaciones[departamento].KPCD || 0
 
     // Si hay ambos tipos de afectaciones
     if (afectacionBOPD > 0 && afectacionKPCD > 0) {
