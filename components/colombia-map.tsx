@@ -27,86 +27,74 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
     KPCD: 0,
   })
 
-  useEffect(() => {
+  const getColor = (departamento: string) => {
+    if (!afectaciones[departamento]) return "#E5E7EB"
+
     const maxBOPD = Math.max(...Object.values(afectaciones).map((a) => a.BOPD || 0))
     const maxKPCD = Math.max(...Object.values(afectaciones).map((a) => a.KPCD || 0))
+    
+    const afectacionBOPD = afectaciones[departamento].BOPD || 0
+    const afectacionKPCD = afectaciones[departamento].KPCD || 0
 
-    const getColor = (departamento: string) => {
-      if (!afectaciones[departamento]) return "#E5E7EB"
-
-      const afectacionBOPD = afectaciones[departamento].BOPD || 0
-      const afectacionKPCD = afectaciones[departamento].KPCD || 0
-
-      if (afectacionBOPD > 0 && afectacionKPCD > 0) {
-        return "#9333EA"
-      }
-
-      if (afectacionBOPD > 0) {
-        const intensidad = afectacionBOPD / maxBOPD
-        if (intensidad > 0.7) return "#1E40AF"
-        if (intensidad > 0.4) return "#3B82F6"
-        return "#93C5FD"
-      }
-
-      if (afectacionKPCD > 0) {
-        const intensidad = afectacionKPCD / maxKPCD
-        if (intensidad > 0.7) return "#166534"
-        if (intensidad > 0.4) return "#22C55E"
-        return "#86EFAC"
-      }
-
-      return "#E5E7EB"
+    if (afectacionBOPD > 0 && afectacionKPCD > 0) {
+      return "#9333EA"
     }
 
-    const handleMouseOver = (e: MouseEvent, departamento: string) => {
-      const path = e.target as SVGPathElement
-      path.style.strokeWidth = "2"
-      path.style.stroke = "#1F2937"
-
-      const rect = svgRef.current!.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
-
-      setTooltipInfo({
-        visible: true,
-        x,
-        y,
-        departamento: departamento,
-        BOPD: afectaciones[departamento]?.BOPD || 0,
-        KPCD: afectaciones[departamento]?.KPCD || 0,
-      })
+    if (afectacionBOPD > 0) {
+      const intensidad = afectacionBOPD / maxBOPD
+      if (intensidad > 0.7) return "#1E40AF"
+      if (intensidad > 0.4) return "#3B82F6"
+      return "#93C5FD"
     }
 
-    const handleMouseOut = (e: MouseEvent) => {
-      const path = e.target as SVGPathElement
-      path.style.strokeWidth = "1"
-      path.style.stroke = "#6B7280"
-      setTooltipInfo(prev => ({ ...prev, visible: false }))
+    if (afectacionKPCD > 0) {
+      const intensidad = afectacionKPCD / maxKPCD
+      if (intensidad > 0.7) return "#166534"
+      if (intensidad > 0.4) return "#22C55E"
+      return "#86EFAC"
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = svgRef.current!.getBoundingClientRect()
-      const x = e.clientX - rect.left
-      const y = e.clientY - rect.top
+    return "#E5E7EB"
+  }
 
-      setTooltipInfo(prev => ({
-        ...prev,
-        x,
-        y,
-      }))
-    }
+  const handleMouseOver = (e: React.MouseEvent<SVGPathElement>, departamento: string) => {
+    const path = e.currentTarget
+    path.style.strokeWidth = "2"
+    path.style.stroke = "#1F2937"
 
-    return () => {
-      if (svgRef.current) {
-        const paths = svgRef.current.querySelectorAll('path')
-        paths.forEach(path => {
-          path.removeEventListener('mouseover', handleMouseOver)
-          path.removeEventListener('mouseout', handleMouseOut)
-          path.removeEventListener('mousemove', handleMouseMove)
-        })
-      }
-    }
-  }, [afectaciones])
+    const rect = svgRef.current!.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    setTooltipInfo({
+      visible: true,
+      x,
+      y,
+      departamento,
+      BOPD: afectaciones[departamento]?.BOPD || 0,
+      KPCD: afectaciones[departamento]?.KPCD || 0,
+    })
+  }
+
+  const handleMouseOut = (e: React.MouseEvent<SVGPathElement>) => {
+    const path = e.currentTarget
+    path.style.strokeWidth = "1"
+    path.style.stroke = "#6B7280"
+    setTooltipInfo(prev => ({ ...prev, visible: false }))
+  }
+
+  const handleMouseMove = (e: React.MouseEvent<SVGPathElement>) => {
+    if (!svgRef.current) return
+    const rect = svgRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    setTooltipInfo(prev => ({
+      ...prev,
+      x,
+      y,
+    }))
+  }
 
   return (
     <div className="relative w-full h-full bg-white rounded-lg">
@@ -117,7 +105,6 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
         preserveAspectRatio="xMidYMid meet"
       >
         <g transform="translate(100,100) scale(1.2)">
-          {/* Departamentos de Colombia */}
           {departamentos.map((depto) => (
             <path
               key={depto.id}
@@ -173,7 +160,7 @@ const departamentos = [
     nombre: "Amazonas",
   },
   {
-    id: "ANTIOQUIA",
+    id: "ANTIOQUIA", 
     path: "M300,400 L350,380 L390,400 L410,370 L380,340 L410,310 L380,280 L340,290 L310,320 L280,310 L250,340 L280,370 L300,400 Z",
     nombre: "Antioquia",
   },
