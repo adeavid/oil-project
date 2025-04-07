@@ -39,14 +39,40 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
         if (!response.ok) {
           throw new Error('Failed to fetch GeoJSON')
         }
-        const data = await response.json() 
-        setGeoJsonData(data)
+        const data = await response.json()
+        // Filter the data based on current filters
+        const filteredFeatures = data.features.filter((feature: any) => {
+          if (filtroTipo !== "todos" && feature.properties.TIPO_HIDRO !== filtroTipo) {
+            return false
+          }
+          if (filtroEstado !== "todos" && feature.properties.ESTADO_RUTY !== filtroEstado) {
+            return false
+          }
+          if (filtroArea !== "todos") {
+            const area = feature.properties.AREA_KM2
+            switch (filtroArea) {
+              case "pequeño":
+                return area < 50
+              case "mediano":
+                return area >= 50 && area < 200
+              case "grande":
+                return area >= 200
+              default:
+                return true
+            }
+          }
+          return true
+        })
+        setGeoJsonData({
+          ...data,
+          features: filteredFeatures
+        })
       } catch (error) {
         console.error('Error loading GeoJSON:', error)
       }
     }
     getData()
-  }, [])
+  }, [filtroTipo, filtroEstado, filtroArea]) // Re-run when filters change
 
   const getColor = (campo: any) => {
     const props = campo.properties
