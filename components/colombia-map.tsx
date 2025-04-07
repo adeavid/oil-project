@@ -1,12 +1,11 @@
-
 "use client"
 
 import { useEffect, useState } from "react"
 import dynamic from 'next/dynamic'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { AfectacionesDepartamento } from "@/types"
 import "leaflet/dist/leaflet.css"
 
-// Dynamically import Leaflet components with no SSR
 const MapContainer = dynamic(
   () => import('react-leaflet').then((mod) => mod.MapContainer),
   { ssr: false }
@@ -26,27 +25,15 @@ interface ColombiaMapProps {
   afectaciones: Record<string, AfectacionesDepartamento>
 }
 
-// Datos de prueba para campos específicos
-const camposAfectados = {
-  "TIBU": {
-    BOPD: 1200,
-    KPCD: 0,
-    estado: "VIGENTE"
-  },
-  "SARDINATA": {
-    BOPD: 0,
-    KPCD: 1500,
-    estado: "EN TRAMITE"
-  }
-}
-
 export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
+  const [filtroEstado, setFiltroEstado] = useState("todos")
+  const [filtroTipo, setFiltroTipo] = useState("todos")
+  const [filtroArea, setFiltroArea] = useState("todos")
   const [geoJsonData, setGeoJsonData] = useState<any>(null)
 
   useEffect(() => {
     const getData = async () => {
-      const response = await fetch('/attached_assets/campos_petroleros.geojson')
-      const data = await response.json()
+      const data = await import("@/attached_assets/campos_petroleros.geojson")
       setGeoJsonData(data)
     }
     getData()
@@ -56,34 +43,79 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
     const props = campo.properties
     if (!props) return "#f4f4f5"
 
-    // Color según estado
-    switch (props.ESTADO_RUTY) {
-      case "VIGENTE":
-        return "#2563eb" // Azul
-      case "EN TRAMITE":
-        return "#16a34a" // Verde
-      case "DEROGADA":
-        return "#7e22ce" // Morado
-      default:
-        return "#f4f4f5" // Gris por defecto
+    if (props.TIPO_HIDRO === "PETROLEO") return "#2563eb"
+    if (props.TIPO_HIDRO === "GAS") return "#16a34a"
+    if (props.TIPO_HIDRO === "PETROLEO-GAS") return "#7e22ce"
+
+    return "#f4f4f5"
+  }
+
+  const filtrarFeatures = (feature: any) => {
+    if (!feature.properties) return false
+
+    if (filtroTipo !== "todos" && feature.properties.TIPO_HIDRO !== filtroTipo) {
+      return false
     }
+
+    if (filtroEstado !== "todos" && feature.properties.ESTADO_RUTY !== filtroEstado) {
+      return false
+    }
+
+    if (filtroArea !== "todos") {
+      const area = feature.properties.AREA_KM2
+      switch (filtroArea) {
+        case "pequeño":
+          return area < 50
+        case "mediano":
+          return area >= 50 && area < 200
+        case "grande":
+          return area >= 200
+        default:
+          return true
+      }
+    }
+
+    return true
   }
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-4 text-sm">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-blue-600" />
-          <span>Vigente</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-green-600" />
-          <span>En Trámite</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-full bg-purple-600" />
-          <span>Derogado</span>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Select value={filtroTipo} onValueChange={setFiltroTipo}>
+          <SelectTrigger>
+            <SelectValue placeholder="Tipo de hidrocarburo" />
+          </SelectTrigger>
+          <SelectContent className="z-[1000]">
+            <SelectItem value="todos">Todos los tipos</SelectItem>
+            <SelectItem value="PETROLEO">Petróleo</SelectItem>
+            <SelectItem value="GAS">Gas</SelectItem>
+            <SelectItem value="PETROLEO-GAS">Petróleo-Gas</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={filtroEstado} onValueChange={setFiltroEstado}>
+          <SelectTrigger>
+            <SelectValue placeholder="Estado" />
+          </SelectTrigger>
+          <SelectContent className="z-[1000]">
+            <SelectItem value="todos">Todos los estados</SelectItem>
+            <SelectItem value="DESARROLLO">Desarrollo</SelectItem>
+            <SelectItem value="PRODUCCION">Producción</SelectItem>
+            <SelectItem value="EXPLORACION">Exploración</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select value={filtroArea} onValueChange={setFiltroArea}>
+          <SelectTrigger>
+            <SelectValue placeholder="Área" />
+          </SelectTrigger>
+          <SelectContent className="z-[1000]">
+            <SelectItem value="todos">Todas las áreas</SelectItem>
+            <SelectItem value="pequeño">Pequeño (&lt;50 km²)</SelectItem>
+            <SelectItem value="mediano">Mediano (50-200 km²)</SelectItem>
+            <SelectItem value="grande">Grande (&gt;200 km²)</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="h-[600px] w-full relative">
@@ -98,34 +130,24 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
           />
           {geoJsonData && (
             <GeoJSON
-              data={geoJsonData}
+              data={{
+                ...geoJsonData,
+                features: geoJsonData.features.filter(filtrarFeatures)
+              }}
               style={(feature) => ({
                 color: getColor(feature),
                 weight: 2,
                 fillOpacity: 0.6
               })}
               onEachFeature={(feature, layer) => {
-                const nombre = feature.properties.CAMPO
-                const afectacion = camposAfectados[nombre]
-
                 let popupContent = `
                   <div class="p-2">
-                    <h3 class="font-bold">${nombre}</h3>
-                    <p>Estado: ${feature.properties.ESTADO_RUTY}</p>
+                    <h3 class="font-bold">${feature.properties.CAMPO}</h3>
                     <p>Tipo: ${feature.properties.TIPO_HIDRO}</p>
+                    <p>Estado: ${feature.properties.ESTADO_RUTY}</p>
                     <p>Área: ${feature.properties.AREA_KM2.toFixed(2)} km²</p>
+                  </div>
                 `
-
-                if (afectacion) {
-                  if (afectacion.BOPD > 0) {
-                    popupContent += `<p class="text-red-600 font-bold">Afectación: ${afectacion.BOPD} BOPD</p>`
-                  }
-                  if (afectacion.KPCD > 0) {
-                    popupContent += `<p class="text-red-600 font-bold">Afectación: ${afectacion.KPCD} KPCD</p>`
-                  }
-                }
-
-                popupContent += `</div>`
                 layer.bindPopup(popupContent)
               }}
             />
