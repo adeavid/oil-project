@@ -1,7 +1,9 @@
+
 "use client"
 
 import { useEffect, useRef, useState } from "react"
 import { Droplet, Wind } from "lucide-react"
+import { ComposableMap, Geographies, Geography } from "react-simple-maps"
 import type { AfectacionesDepartamento } from "@/types"
 import coJson from "@/attached_assets/co.json"
 
@@ -10,7 +12,6 @@ interface ColombiaMapProps {
 }
 
 export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
-  const svgRef = useRef<SVGSVGElement>(null)
   const [tooltipInfo, setTooltipInfo] = useState<{
     visible: boolean
     x: number
@@ -57,68 +58,52 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
     return "#fff"
   }
 
-  const handleMouseOver = (e: React.MouseEvent<SVGPathElement>, departamento: string) => {
-    const path = e.currentTarget
-    path.style.stroke = "#555"
-    path.style.strokeWidth = "2"
-
-    const rect = svgRef.current!.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-
-    setTooltipInfo({
-      visible: true,
-      x,
-      y,
-      departamento,
-      BOPD: afectaciones[departamento]?.BOPD || 0,
-      KPCD: afectaciones[departamento]?.KPCD || 0,
-    })
-  }
-
-  const handleMouseOut = (e: React.MouseEvent<SVGPathElement>) => {
-    const path = e.currentTarget
-    path.style.stroke = "#aaa"
-    path.style.strokeWidth = "1"
-    setTooltipInfo(prev => ({ ...prev, visible: false }))
-  }
-
-  const handleMouseMove = (e: React.MouseEvent<SVGPathElement>) => {
-    if (!svgRef.current) return
-    const rect = svgRef.current.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
-
-    setTooltipInfo(prev => ({
-      ...prev,
-      x,
-      y,
-    }))
-  }
-
   return (
     <div className="relative w-full h-full">
-      <svg
-        ref={svgRef}
-        viewBox="-80 -10 160 180"
-        className="w-full h-full"
-        preserveAspectRatio="xMidYMid meet"
+      <ComposableMap
+        projection="geoMercator"
+        projectionConfig={{
+          scale: 2500,
+          center: [-74, 4]
+        }}
       >
-        <g>
-          {coJson.features.map((feature, index) => (
-            <path
-              key={index}
-              d={`M ${feature.geometry.coordinates[0][0].map(coord => coord.join(',')).join(' L ')}`}
-              fill={getColor(feature.properties?.nombre || "")}
-              stroke="#aaa"
-              strokeWidth="1"
-              onMouseOver={(e) => handleMouseOver(e, feature.properties?.nombre || "")}
-              onMouseOut={handleMouseOut}
-              onMouseMove={handleMouseMove}
-            />
-          ))}
-        </g>
-      </svg>
+        <Geographies geography={coJson}>
+          {({ geographies }) =>
+            geographies.map((geo) => {
+              const nombre = geo.properties?.name
+              return (
+                <Geography
+                  key={geo.rsmKey}
+                  geography={geo}
+                  fill={getColor(nombre)}
+                  stroke="#aaa"
+                  strokeWidth={1}
+                  style={{
+                    default: { outline: "none" },
+                    hover: { outline: "none", stroke: "#555", strokeWidth: 2 },
+                    pressed: { outline: "none" }
+                  }}
+                  onMouseEnter={(e) => {
+                    const path = e.target
+                    const rect = path.getBoundingClientRect()
+                    setTooltipInfo({
+                      visible: true,
+                      x: rect.left,
+                      y: rect.top,
+                      departamento: nombre,
+                      BOPD: afectaciones[nombre]?.BOPD || 0,
+                      KPCD: afectaciones[nombre]?.KPCD || 0,
+                    })
+                  }}
+                  onMouseLeave={() => {
+                    setTooltipInfo(prev => ({ ...prev, visible: false }))
+                  }}
+                />
+              )
+            })
+          }
+        </Geographies>
+      </ComposableMap>
 
       {tooltipInfo.visible && (
         <div
