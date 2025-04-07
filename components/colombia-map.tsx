@@ -1,9 +1,9 @@
 
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { Droplet, Wind } from "lucide-react"
-import { ComposableMap, Geographies, Geography } from "react-simple-maps"
+import { ComposableMap, Geographies, Geography, ZoomableGroup } from "react-simple-maps"
 import type { AfectacionesDepartamento } from "@/types"
 import { Card, CardContent } from "./ui/card"
 import coJson from "@/attached_assets/co.json"
@@ -18,6 +18,22 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
     BOPD: number
     KPCD: number
   } | null>(null)
+  
+  const [position, setPosition] = useState({ coordinates: [-74, 4.5], zoom: 4 })
+
+  const handleZoomIn = useCallback(() => {
+    if (position.zoom >= 8) return
+    setPosition(pos => ({ ...pos, zoom: pos.zoom * 1.2 }))
+  }, [position.zoom])
+
+  const handleZoomOut = useCallback(() => {
+    if (position.zoom <= 1) return
+    setPosition(pos => ({ ...pos, zoom: pos.zoom / 1.2 }))
+  }, [position.zoom])
+
+  const handleMoveEnd = useCallback((position: { coordinates: [number, number]; zoom: number }) => {
+    setPosition(position)
+  }, [])
 
   const getColor = (departamento: string) => {
     if (!afectaciones[departamento]) return "#f4f4f5"
@@ -52,18 +68,21 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
   return (
     <div className="grid grid-cols-3 gap-4 h-full">
       <div className="col-span-2">
-        <ComposableMap
-          projection="geoMercator"
-          projectionConfig={{
-            scale: 2300,
-            center: [-74, 4.5],
-          }}
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
-        >
-          <Geographies geography={coJson}>
+        <div className="relative">
+          <ComposableMap
+            projection="geoMercator"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          >
+            <ZoomableGroup
+              zoom={position.zoom}
+              center={position.coordinates as [number, number]}
+              onMoveEnd={handleMoveEnd}
+              maxZoom={8}
+            >
+              <Geographies geography={coJson}>
             {({ geographies }) =>
               geographies.map((geo) => {
                 const nombre = geo.properties?.name
@@ -94,7 +113,23 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
               })
             }
           </Geographies>
-        </ComposableMap>
+            </ZoomableGroup>
+          </ComposableMap>
+          <div className="absolute top-0 right-0 p-2 flex flex-col gap-2">
+            <button
+              onClick={handleZoomIn}
+              className="bg-white p-2 rounded-full shadow-lg hover:bg-zinc-50 transition-colors"
+            >
+              +
+            </button>
+            <button
+              onClick={handleZoomOut}
+              className="bg-white p-2 rounded-full shadow-lg hover:bg-zinc-50 transition-colors"
+            >
+              -
+            </button>
+          </div>
+        </div>
       </div>
       <div className="col-span-1">
         <Card className="h-full">
