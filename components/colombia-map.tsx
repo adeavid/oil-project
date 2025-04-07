@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useEffect, useState, useCallback } from "react"
@@ -18,36 +19,42 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
     KPCD: number
   } | null>(null)
 
-  const [position, setPosition] = useState({ coordinates: [-74, 4.5], zoom: 20 }) // Added zoom state
+  const [position, setPosition] = useState({ coordinates: [-74, 4.5], zoom: 20 })
 
   const getColor = (departamento: string) => {
     if (!afectaciones[departamento]) return "#f4f4f5"
 
-    const maxBOPD = Math.max(...Object.values(afectaciones).map((a) => a.BOPD || 0))
-    const maxKPCD = Math.max(...Object.values(afectaciones).map((a) => a.KPCD || 0))
+    const maxBOPD = Math.max(...Object.values(afectaciones).map((a) => a.BOPD))
+    const maxKPCD = Math.max(...Object.values(afectaciones).map((a) => a.KPCD))
 
-    const afectacionBOPD = afectaciones[departamento].BOPD || 0
-    const afectacionKPCD = afectaciones[departamento].KPCD || 0
+    const afectacionBOPD = afectaciones[departamento].BOPD
+    const afectacionKPCD = afectaciones[departamento].KPCD
 
+    // Si hay ambos tipos de afectaciones
     if (afectacionBOPD > 0 && afectacionKPCD > 0) {
-      return "#9333EA"
+      const intensidadTotal = (afectacionBOPD / maxBOPD + afectacionKPCD / maxKPCD) / 2
+      if (intensidadTotal > 0.7) return "#7E22CE" // Púrpura oscuro
+      if (intensidadTotal > 0.4) return "#9333EA" // Púrpura medio
+      return "#A855F7" // Púrpura claro
     }
 
+    // Si solo hay afectación BOPD
     if (afectacionBOPD > 0) {
       const intensidad = afectacionBOPD / maxBOPD
-      if (intensidad > 0.7) return "#1E40AF"
-      if (intensidad > 0.4) return "#3B82F6"
-      return "#93C5FD"
+      if (intensidad > 0.7) return "#1E40AF" // Azul oscuro
+      if (intensidad > 0.4) return "#3B82F6" // Azul medio
+      return "#93C5FD" // Azul claro
     }
 
+    // Si solo hay afectación KPCD
     if (afectacionKPCD > 0) {
       const intensidad = afectacionKPCD / maxKPCD
-      if (intensidad > 0.7) return "#166534"
-      if (intensidad > 0.4) return "#22C55E"
-      return "#86EFAC"
+      if (intensidad > 0.7) return "#166534" // Verde oscuro
+      if (intensidad > 0.4) return "#22C55E" // Verde medio
+      return "#86EFAC" // Verde claro
     }
 
-    return "#f4f4f5"
+    return "#f4f4f5" // Color por defecto
   }
 
   const handleZoomIn = useCallback(() => {
@@ -66,8 +73,8 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
         <ComposableMap
           projection="geoMercator"
           projectionConfig={{
-            scale: position.zoom * 100, // Make scale dynamic based on zoom
-            center: position.coordinates, // Center based on position state
+            scale: position.zoom * 100,
+            center: position.coordinates,
           }}
           style={{
             width: "100%",
@@ -91,10 +98,11 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
                       pressed: { outline: "none" }
                     }}
                     onMouseEnter={() => {
+                      const data = afectaciones[nombre]
                       setSelectedDep({
                         departamento: nombre,
-                        BOPD: afectaciones[nombre]?.BOPD || 0,
-                        KPCD: afectaciones[nombre]?.KPCD || 0,
+                        BOPD: data?.BOPD || 0,
+                        KPCD: data?.KPCD || 0
                       })
                     }}
                     onMouseLeave={() => {
@@ -106,8 +114,20 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
             }
           </Geographies>
         </ComposableMap>
-        <button onClick={handleZoomIn}>Zoom In</button> {/* Added zoom buttons */}
-        <button onClick={handleZoomOut}>Zoom Out</button>
+        <div className="flex gap-2 mt-2">
+          <button 
+            onClick={handleZoomIn}
+            className="px-3 py-1 bg-zinc-100 rounded hover:bg-zinc-200"
+          >
+            Zoom In
+          </button>
+          <button 
+            onClick={handleZoomOut}
+            className="px-3 py-1 bg-zinc-100 rounded hover:bg-zinc-200"
+          >
+            Zoom Out
+          </button>
+        </div>
       </div>
       <div className="col-span-1">
         <Card className="h-full">
