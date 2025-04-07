@@ -22,35 +22,19 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
 
   const getColor = (departamento: string) => {
     if (!afectaciones[departamento]) return "#f4f4f5"
+    
+    const afectacion = afectaciones[departamento]
+    const totalAfectacion = (afectacion.BOPD || 0) + (afectacion.KPCD || 0)
+    
+    if (totalAfectacion === 0) return "#f4f4f5"
+    
+    // Calcula el total máximo de afectaciones
+    const maxTotal = Math.max(...Object.values(afectaciones).map(a => (a.BOPD || 0) + (a.KPCD || 0)))
+    const intensidad = totalAfectacion / maxTotal
 
-    const maxBOPD = Math.max(...Object.values(afectaciones).map((a) => a.BOPD || 0))
-    const maxKPCD = Math.max(...Object.values(afectaciones).map((a) => a.KPCD || 0))
-
-    const afectacionBOPD = afectaciones[departamento]?.BOPD || 0
-    const afectacionKPCD = afectaciones[departamento]?.KPCD || 0
-
-    // Si hay ambos tipos de afectaciones
-    if (afectacionBOPD > 0 && afectacionKPCD > 0) {
-      return "#7E22CE" // Púrpura para ambos tipos
-    }
-
-    // Si solo hay afectación BOPD
-    if (afectacionBOPD > 0) {
-      const intensidad = afectacionBOPD / maxBOPD
-      if (intensidad > 0.7) return "#1E40AF" // Azul oscuro
-      if (intensidad > 0.4) return "#3B82F6" // Azul medio
-      return "#93C5FD" // Azul claro
-    }
-
-    // Si solo hay afectación KPCD
-    if (afectacionKPCD > 0) {
-      const intensidad = afectacionKPCD / maxKPCD
-      if (intensidad > 0.7) return "#166534" // Verde oscuro
-      if (intensidad > 0.4) return "#22C55E" // Verde medio
-      return "#86EFAC" // Verde claro
-    }
-
-    return "#f4f4f5" // Color por defecto
+    if (intensidad > 0.7) return "#7E22CE" // Alto
+    if (intensidad > 0.4) return "#9333EA" // Medio
+    return "#A855F7" // Bajo
   }
 
   const handleZoomIn = useCallback(() => {
