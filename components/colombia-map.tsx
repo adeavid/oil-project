@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useEffect, useState } from "react"
@@ -33,7 +34,8 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await import("@/attached_assets/campos_petroleros.geojson")
+      const response = await fetch('/attached_assets/campos_petroleros.geojson')
+      const data = await response.json()
       setGeoJsonData(data)
     }
     getData()
@@ -99,9 +101,9 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
           </SelectTrigger>
           <SelectContent className="z-[1000]">
             <SelectItem value="todos">Todos los estados</SelectItem>
-            <SelectItem value="DESARROLLO">Desarrollo</SelectItem>
-            <SelectItem value="PRODUCCION">Producción</SelectItem>
-            <SelectItem value="EXPLORACION">Exploración</SelectItem>
+            <SelectItem value="VIGENTE">Vigente</SelectItem>
+            <SelectItem value="EN TRAMITE">En trámite</SelectItem>
+            <SelectItem value="DEROGADA">Derogado</SelectItem>
           </SelectContent>
         </Select>
 
