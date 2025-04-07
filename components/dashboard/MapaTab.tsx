@@ -24,7 +24,7 @@ const datosEjemplo: Record<string, AfectacionesDepartamento> = {
   "ANTIOQUIA": { BOPD: 200, KPCD: 900 }
 }
 
-export function MapaTab({ afectacionesPorDepartamento = datosEjemplo, umbralAfectacion }: MapaTabProps) {
+export function MapaTab({ afectacionesPorDepartamento, umbralAfectacion }: MapaTabProps) {
   return (
     <div className="space-y-6">
       <Card className="overflow-hidden">

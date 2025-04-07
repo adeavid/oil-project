@@ -26,15 +26,12 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
     const maxBOPD = Math.max(...Object.values(afectaciones).map((a) => a.BOPD || 0))
     const maxKPCD = Math.max(...Object.values(afectaciones).map((a) => a.KPCD || 0))
 
-    const afectacionBOPD = afectaciones[departamento].BOPD || 0
-    const afectacionKPCD = afectaciones[departamento].KPCD || 0
+    const afectacionBOPD = afectaciones[departamento]?.BOPD || 0
+    const afectacionKPCD = afectaciones[departamento]?.KPCD || 0
 
     // Si hay ambos tipos de afectaciones
     if (afectacionBOPD > 0 && afectacionKPCD > 0) {
-      const intensidadTotal = (afectacionBOPD / maxBOPD + afectacionKPCD / maxKPCD) / 2
-      if (intensidadTotal > 0.7) return "#7E22CE" // Púrpura oscuro
-      if (intensidadTotal > 0.4) return "#9333EA" // Púrpura medio
-      return "#A855F7" // Púrpura claro
+      return "#7E22CE" // Púrpura para ambos tipos
     }
 
     // Si solo hay afectación BOPD
