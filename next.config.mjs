@@ -1,4 +1,3 @@
-
 let userConfig = undefined
 try {
   userConfig = await import('./v0-user-next.config.mjs')
@@ -29,7 +28,8 @@ const nextConfig = {
   webpack: (config) => {
     config.module.rules.push({
       test: /\.geojson$/,
-      type: 'json',
+      use: ['json-loader'],
+      type: 'json'
     })
     return config
   },
