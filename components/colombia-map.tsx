@@ -98,45 +98,20 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
 
   return (
     <div className="relative w-full h-full">
-      <style>
-        {`
-          .background {
-            fill: #eee;
-            pointer-events: all;
-          }
-          .map-layer {
-            fill: #fff;
-            stroke: #aaa;
-          }
-          .effect-layer {
-            pointer-events: none;
-          }
-          text {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            font-weight: 300;
-          }
-          text.big-text {
-            font-size: 30px;
-            font-weight: 400;
-          }
-          .effect-layer text, text.dummy-text {
-            font-size: 12px;
-          }
-        `}
-      </style>
       <svg
         ref={svgRef}
-        viewBox="0 0 800 1000"
+        viewBox="0 0 400 500"
         className="w-full h-full"
         preserveAspectRatio="xMidYMid meet"
       >
-        <rect className="background" width="800" height="1000" />
-        <g className="map-layer" transform="translate(100,100) scale(1.2)">
+        <g transform="translate(0,0)">
           {departamentos.map((depto) => (
             <path
               key={depto.id}
               d={depto.path}
               fill={getColor(depto.id)}
+              stroke="#aaa"
+              strokeWidth="1"
               onMouseOver={(e) => handleMouseOver(e, depto.nombre)}
               onMouseOut={handleMouseOut}
               onMouseMove={handleMouseMove}
@@ -181,162 +156,162 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
 const departamentos = [
   {
     id: "AMAZONAS",
-    path: "M430,600 L520,580 L600,620 L580,680 L500,700 L430,680 L430,600 Z",
-    nombre: "Amazonas",
+    path: "M280,420 L340,400 L380,420 L360,460 L300,470 L280,420",
+    nombre: "Amazonas"
   },
   {
     id: "ANTIOQUIA",
-    path: "M250,280 L300,260 L330,290 L310,320 L280,330 L250,310 L250,280 Z",
-    nombre: "Antioquia",
+    path: "M160,200 L200,180 L220,210 L200,230 L170,240 L160,200",
+    nombre: "Antioquia"
   },
   {
     id: "ARAUCA",
-    path: "M520,290 L570,280 L600,300 L630,280 L600,250 L550,270 L520,290 Z",
-    nombre: "Arauca",
+    path: "M280,180 L320,170 L340,190 L320,210 L280,180",
+    nombre: "Arauca"
   },
   {
     id: "ATLANTICO",
-    path: "M270,190 L300,180 L310,210 L280,230 L270,190 Z",
-    nombre: "Atlántico",
+    path: "M150,120 L170,110 L180,140 L160,150 L150,120",
+    nombre: "Atlántico"
   },
   {
     id: "BOLIVAR",
-    path: "M300,180 L330,190 L340,240 L310,280 L330,330 L300,360 L270,310 L300,270 L280,230 L310,210 L300,180 Z",
-    nombre: "Bolívar",
+    path: "M170,110 L200,120 L210,170 L180,200 L200,240 L170,260 L140,220 L170,190 L160,150 L180,140 L170,110",
+    nombre: "Bolívar"
   },
   {
     id: "BOYACA",
-    path: "M410,310 L450,300 L480,310 L510,280 L480,270 L450,280 L420,270 L410,310 Z",
-    nombre: "Boyacá",
+    path: "M240,200 L270,190 L290,200 L310,180 L290,170 L270,180 L250,170 L240,200",
+    nombre: "Boyacá"
   },
   {
     id: "CALDAS",
-    path: "M340,380 L370,370 L400,380 L370,400 L340,380 Z",
-    nombre: "Caldas",
+    path: "M200,260 L220,250 L240,260 L220,280 L200,260",
+    nombre: "Caldas"
   },
   {
     id: "CAQUETA",
-    path: "M400,490 L450,510 L490,490 L520,520 L490,550 L450,540 L400,570 L370,540 L400,490 Z",
-    nombre: "Caquetá",
+    path: "M240,340 L280,350 L310,340 L330,360 L310,380 L280,370 L240,390 L220,370 L240,340",
+    nombre: "Caquetá"
   },
   {
     id: "CASANARE",
-    path: "M480,310 L520,290 L550,320 L520,350 L480,340 L480,310 Z",
-    nombre: "Casanare",
+    path: "M290,200 L320,190 L340,210 L320,230 L290,220 L290,200",
+    nombre: "Casanare"
   },
   {
     id: "CAUCA",
-    path: "M310,490 L340,460 L370,480 L400,460 L390,430 L340,450 L310,490 Z",
-    nombre: "Cauca",
+    path: "M180,340 L200,320 L220,330 L240,320 L230,300 L200,310 L180,340",
+    nombre: "Cauca"
   },
   {
     id: "CESAR",
-    path: "M330,190 L360,210 L370,250 L340,280 L330,250 L340,240 L330,190 Z",
-    nombre: "Cesar",
+    path: "M200,120 L220,130 L230,160 L210,180 L200,160 L210,170 L200,120",
+    nombre: "Cesar"
   },
   {
     id: "CHOCO",
-    path: "M270,370 L240,340 L210,370 L220,420 L250,450 L280,420 L270,370 Z",
-    nombre: "Chocó",
+    path: "M140,260 L120,240 L100,260 L110,290 L130,310 L150,290 L140,260",
+    nombre: "Chocó"
   },
   {
     id: "CORDOBA",
-    path: "M270,310 L240,280 L250,250 L300,270 L270,310 Z",
-    nombre: "Córdoba",
+    path: "M140,220 L120,200 L130,180 L170,190 L140,220",
+    nombre: "Córdoba"
   },
   {
     id: "CUNDINAMARCA",
-    path: "M410,310 L420,340 L450,350 L420,370 L400,340 L370,340 L410,310 Z",
-    nombre: "Cundinamarca",
+    path: "M240,200 L250,220 L270,230 L250,250 L240,230 L220,230 L240,200",
+    nombre: "Cundinamarca"
   },
   {
     id: "GUAINIA",
-    path: "M630,380 L670,370 L720,400 L690,430 L630,420 L630,380 Z",
-    nombre: "Guainía",
+    path: "M380,260 L410,250 L440,270 L420,290 L380,280 L380,260",
+    nombre: "Guainía"
   },
   {
     id: "GUAVIARE",
-    path: "M520,450 L570,430 L600,460 L570,490 L520,480 L520,450 Z",
-    nombre: "Guaviare",
+    path: "M320,310 L350,300 L370,320 L350,340 L320,330 L320,310",
+    nombre: "Guaviare"
   },
   {
     id: "HUILA",
-    path: "M390,430 L420,420 L450,430 L430,460 L400,460 L390,430 Z",
-    nombre: "Huila",
+    path: "M230,300 L250,290 L270,300 L260,320 L240,320 L230,300",
+    nombre: "Huila"
   },
   {
     id: "LA GUAJIRA",
-    path: "M360,210 L390,180 L420,190 L400,220 L360,210 Z",
-    nombre: "La Guajira",
+    path: "M220,130 L240,110 L260,120 L250,140 L220,130",
+    nombre: "La Guajira"
   },
   {
     id: "MAGDALENA",
-    path: "M300,180 L330,190 L330,250 L300,270 L300,180 Z",
-    nombre: "Magdalena",
+    path: "M170,110 L200,120 L200,160 L170,190 L170,110",
+    nombre: "Magdalena"
   },
   {
     id: "META",
-    path: "M450,350 L480,340 L520,350 L550,380 L520,410 L480,400 L450,350 Z",
-    nombre: "Meta",
+    path: "M270,230 L290,220 L320,230 L340,250 L320,270 L290,260 L270,230",
+    nombre: "Meta"
   },
   {
     id: "NARIÑO",
-    path: "M280,490 L310,490 L340,520 L310,550 L280,520 L280,490 Z",
-    nombre: "Nariño",
+    path: "M150,340 L180,340 L200,360 L180,380 L150,360 L150,340",
+    nombre: "Nariño"
   },
   {
     id: "NORTE DE SANTANDER",
-    path: "M370,250 L400,220 L430,240 L420,270 L370,250 Z",
-    nombre: "Norte de Santander",
+    path: "M230,160 L250,140 L270,150 L250,170 L230,160",
+    nombre: "Norte de Santander"
   },
   {
     id: "PUTUMAYO",
-    path: "M340,520 L370,540 L400,520 L370,510 L340,520 Z",
-    nombre: "Putumayo",
+    path: "M200,360 L220,370 L240,360 L220,350 L200,360",
+    nombre: "Putumayo"
   },
   {
     id: "QUINDIO",
-    path: "M360,400 L370,400 L370,410 L360,410 L360,400 Z",
-    nombre: "Quindío",
+    path: "M220,280 L230,280 L230,290 L220,290 L220,280",
+    nombre: "Quindío"
   },
   {
     id: "RISARALDA",
-    path: "M330,400 L360,400 L360,410 L330,410 L330,400 Z",
-    nombre: "Risaralda",
+    path: "M200,280 L220,280 L220,290 L200,290 L200,280",
+    nombre: "Risaralda"
   },
   {
     id: "SAN ANDRES Y PROVIDENCIA",
-    path: "M120,120 L140,120 L140,140 L120,140 L120,120 Z",
-    nombre: "San Andrés y Providencia",
+    path: "M40,80 L50,80 L50,90 L40,90 L40,80",
+    nombre: "San Andrés y Providencia"
   },
   {
     id: "SANTANDER",
-    path: "M370,250 L420,270 L450,280 L420,310 L370,280 L340,280 L370,250 Z",
-    nombre: "Santander",
+    path: "M230,160 L250,170 L270,180 L250,200 L220,180 L210,180 L230,160",
+    nombre: "Santander"
   },
   {
     id: "SUCRE",
-    path: "M250,250 L300,270 L270,310 L240,280 L250,250 Z",
-    nombre: "Sucre",
+    path: "M130,180 L170,190 L140,220 L120,200 L130,180",
+    nombre: "Sucre"
   },
   {
     id: "TOLIMA",
-    path: "M370,400 L400,380 L420,420 L390,430 L370,400 Z",
-    nombre: "Tolima",
+    path: "M220,280 L240,260 L250,290 L230,300 L220,280",
+    nombre: "Tolima"
   },
   {
     id: "VALLE DEL CAUCA",
-    path: "M310,420 L340,420 L340,450 L310,450 L310,420 Z",
-    nombre: "Valle del Cauca",
+    path: "M180,290 L200,290 L200,310 L180,310 L180,290",
+    nombre: "Valle del Cauca"
   },
   {
     id: "VAUPES",
-    path: "M570,490 L610,480 L640,510 L600,540 L570,490 Z",
-    nombre: "Vaupés",
+    path: "M350,340 L380,330 L400,350 L370,370 L350,340",
+    nombre: "Vaupés"
   },
   {
     id: "VICHADA",
-    path: "M550,320 L600,310 L640,330 L630,360 L580,370 L550,320 Z",
-    nombre: "Vichada",
-  },
+    path: "M340,210 L370,200 L400,220 L390,240 L360,250 L340,210",
+    nombre: "Vichada"
+  }
 ]
