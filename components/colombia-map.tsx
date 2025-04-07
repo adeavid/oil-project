@@ -1,9 +1,25 @@
+
 "use client"
 
 import { useEffect, useRef } from "react"
-import { Map as LeafletMap, TileLayer, GeoJSON } from "react-leaflet"
-import "leaflet/dist/leaflet.css"
+import dynamic from 'next/dynamic'
 import type { AfectacionesDepartamento } from "@/types"
+import "leaflet/dist/leaflet.css"
+
+const MapContainer = dynamic(
+  () => import('react-leaflet').then((mod) => mod.MapContainer),
+  { ssr: false }
+)
+
+const TileLayer = dynamic(
+  () => import('react-leaflet').then((mod) => mod.TileLayer),
+  { ssr: false }
+)
+
+const GeoJSON = dynamic(
+  () => import('react-leaflet').then((mod) => mod.GeoJSON),
+  { ssr: false }
+)
 
 interface ColombiaMapProps {
   afectaciones: Record<string, AfectacionesDepartamento>
@@ -23,7 +39,7 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
 
   return (
     <div className="h-[600px] w-full relative">
-      <LeafletMap
+      <MapContainer
         center={[4.5, -73]}
         zoom={6}
         className="h-full w-full"
@@ -51,7 +67,7 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
             layer.bindPopup(popupContent)
           }}
         />
-      </LeafletMap>
+      </MapContainer>
     </div>
   )
 }
