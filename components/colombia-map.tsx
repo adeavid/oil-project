@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { Droplet, Wind } from "lucide-react"
 import { ComposableMap, Geographies, Geography } from "react-simple-maps"
 import type { AfectacionesDepartamento } from "@/types"
@@ -29,7 +29,7 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
   })
 
   const getColor = (departamento: string) => {
-    if (!afectaciones[departamento]) return "#fff"
+    if (!afectaciones[departamento]) return "#f4f4f5"
 
     const maxBOPD = Math.max(...Object.values(afectaciones).map((a) => a.BOPD || 0))
     const maxKPCD = Math.max(...Object.values(afectaciones).map((a) => a.KPCD || 0))
@@ -55,7 +55,7 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
       return "#86EFAC"
     }
 
-    return "#fff"
+    return "#f4f4f5"
   }
 
   return (
@@ -63,8 +63,12 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
       <ComposableMap
         projection="geoMercator"
         projectionConfig={{
-          scale: 2500,
-          center: [-74, 4]
+          scale: 2300,
+          center: [-74, 4.5],
+        }}
+        style={{
+          width: "100%",
+          height: "100%",
         }}
       >
         <Geographies geography={coJson}>
@@ -76,20 +80,22 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
                   key={geo.rsmKey}
                   geography={geo}
                   fill={getColor(nombre)}
-                  stroke="#aaa"
-                  strokeWidth={1}
+                  stroke="#e4e4e7"
+                  strokeWidth={0.5}
                   style={{
                     default: { outline: "none" },
-                    hover: { outline: "none", stroke: "#555", strokeWidth: 2 },
+                    hover: { outline: "none", stroke: "#71717a", strokeWidth: 1 },
                     pressed: { outline: "none" }
                   }}
                   onMouseEnter={(e) => {
                     const path = e.target
                     const rect = path.getBoundingClientRect()
+                    const parentRect = path.closest(".relative")?.getBoundingClientRect() || { left: 0, top: 0 }
+                    
                     setTooltipInfo({
                       visible: true,
-                      x: rect.left,
-                      y: rect.top,
+                      x: rect.left - parentRect.left + rect.width/2,
+                      y: rect.top - parentRect.top + rect.height/2,
                       departamento: nombre,
                       BOPD: afectaciones[nombre]?.BOPD || 0,
                       KPCD: afectaciones[nombre]?.KPCD || 0,
@@ -107,10 +113,10 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
 
       {tooltipInfo.visible && (
         <div
-          className="absolute bg-white p-3 rounded-md shadow-lg border border-gray-200 z-50 text-sm"
+          className="absolute bg-white p-3 rounded-md shadow-lg border border-zinc-200 z-50 text-sm transform -translate-x-1/2 -translate-y-1/2"
           style={{
-            left: `${tooltipInfo.x + 10}px`,
-            top: `${tooltipInfo.y + 10}px`,
+            left: `${tooltipInfo.x}px`,
+            top: `${tooltipInfo.y}px`,
             pointerEvents: "none",
           }}
         >
