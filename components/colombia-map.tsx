@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import dynamic from 'next/dynamic'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import type { AfectacionesDepartamento } from "@/types"
+import { useReportes } from "@/context/ReportesContext"
 import "leaflet/dist/leaflet.css"
 
 const MapContainer = dynamic(
@@ -27,6 +28,7 @@ interface ColombiaMapProps {
 }
 
 export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
+  const { reportes } = useReportes()
   const [filtroEstado, setFiltroEstado] = useState("todos")
   const [filtroTipo, setFiltroTipo] = useState("todos")
   const [filtroArea, setFiltroArea] = useState("todos")
