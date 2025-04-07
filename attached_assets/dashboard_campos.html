@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard de Campos Petroleros</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <style>
+        body, html { margin: 0; padding: 0; height: 100%; }
+        #map { height: 100%; width: 100%; }
+        .info-panel {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            font-family: sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="info-panel">
+        <h3>Campos Petroleros</h3>
+        <div>Total de campos: <span id="campo-count">...</span></div>
+    </div>
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <script>
+        var map = L.map('map').setView([4.5, -73], 6); // Colombia
+
+        // Base map
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Cargar el GeoJSON
+        fetch('campos_petroleros.geojson')
+            .then(response => response.json())
+            .then(data => {
+                // Contar y mostrar campos
+                const total = data.features.length;
+                document.getElementById("campo-count").innerText = total;
+
+                // Mostrar en el mapa
+                L.geoJSON(data, {
+                    style: {
+                        color: "#0044cc",
+                        weight: 2,
+                        fillOpacity: 0.3
+                    },
+                    onEachFeature: function (feature, layer) {
+                        let popup = '';
+                        for (let key in feature.properties) {
+                            popup += `<strong>${key}:</strong> ${feature.properties[key]}<br>`;
+                        }
+                        layer.bindPopup(popup);
+                    }
+                }).addTo(map);
+            });
+    </script>
+</body>
+</html>
