@@ -1,9 +1,9 @@
-
 "use client"
 
 import { useEffect, useRef, useState } from "react"
 import { Droplet, Wind } from "lucide-react"
 import type { AfectacionesDepartamento } from "@/types"
+import coJson from "@/attached_assets/co.json"
 
 interface ColombiaMapProps {
   afectaciones: Record<string, AfectacionesDepartamento>
@@ -32,7 +32,7 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
 
     const maxBOPD = Math.max(...Object.values(afectaciones).map((a) => a.BOPD || 0))
     const maxKPCD = Math.max(...Object.values(afectaciones).map((a) => a.KPCD || 0))
-    
+
     const afectacionBOPD = afectaciones[departamento].BOPD || 0
     const afectacionKPCD = afectaciones[departamento].KPCD || 0
 
@@ -100,19 +100,19 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
     <div className="relative w-full h-full">
       <svg
         ref={svgRef}
-        viewBox="0 0 400 500"
+        viewBox="-80 -10 160 180"
         className="w-full h-full"
         preserveAspectRatio="xMidYMid meet"
       >
-        <g transform="translate(0,0)">
-          {departamentos.map((depto) => (
+        <g>
+          {coJson.features.map((feature, index) => (
             <path
-              key={depto.id}
-              d={depto.path}
-              fill={getColor(depto.id)}
+              key={index}
+              d={`M ${feature.geometry.coordinates[0][0].map(coord => coord.join(',')).join(' L ')}`}
+              fill={getColor(feature.properties?.nombre || "")}
               stroke="#aaa"
               strokeWidth="1"
-              onMouseOver={(e) => handleMouseOver(e, depto.nombre)}
+              onMouseOver={(e) => handleMouseOver(e, feature.properties?.nombre || "")}
               onMouseOut={handleMouseOut}
               onMouseMove={handleMouseMove}
             />
@@ -152,166 +152,3 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
     </div>
   )
 }
-
-const departamentos = [
-  {
-    id: "AMAZONAS",
-    path: "M280,420 L340,400 L380,420 L360,460 L300,470 L280,420",
-    nombre: "Amazonas"
-  },
-  {
-    id: "ANTIOQUIA",
-    path: "M160,200 L200,180 L220,210 L200,230 L170,240 L160,200",
-    nombre: "Antioquia"
-  },
-  {
-    id: "ARAUCA",
-    path: "M280,180 L320,170 L340,190 L320,210 L280,180",
-    nombre: "Arauca"
-  },
-  {
-    id: "ATLANTICO",
-    path: "M150,120 L170,110 L180,140 L160,150 L150,120",
-    nombre: "Atlántico"
-  },
-  {
-    id: "BOLIVAR",
-    path: "M170,110 L200,120 L210,170 L180,200 L200,240 L170,260 L140,220 L170,190 L160,150 L180,140 L170,110",
-    nombre: "Bolívar"
-  },
-  {
-    id: "BOYACA",
-    path: "M240,200 L270,190 L290,200 L310,180 L290,170 L270,180 L250,170 L240,200",
-    nombre: "Boyacá"
-  },
-  {
-    id: "CALDAS",
-    path: "M200,260 L220,250 L240,260 L220,280 L200,260",
-    nombre: "Caldas"
-  },
-  {
-    id: "CAQUETA",
-    path: "M240,340 L280,350 L310,340 L330,360 L310,380 L280,370 L240,390 L220,370 L240,340",
-    nombre: "Caquetá"
-  },
-  {
-    id: "CASANARE",
-    path: "M290,200 L320,190 L340,210 L320,230 L290,220 L290,200",
-    nombre: "Casanare"
-  },
-  {
-    id: "CAUCA",
-    path: "M180,340 L200,320 L220,330 L240,320 L230,300 L200,310 L180,340",
-    nombre: "Cauca"
-  },
-  {
-    id: "CESAR",
-    path: "M200,120 L220,130 L230,160 L210,180 L200,160 L210,170 L200,120",
-    nombre: "Cesar"
-  },
-  {
-    id: "CHOCO",
-    path: "M140,260 L120,240 L100,260 L110,290 L130,310 L150,290 L140,260",
-    nombre: "Chocó"
-  },
-  {
-    id: "CORDOBA",
-    path: "M140,220 L120,200 L130,180 L170,190 L140,220",
-    nombre: "Córdoba"
-  },
-  {
-    id: "CUNDINAMARCA",
-    path: "M240,200 L250,220 L270,230 L250,250 L240,230 L220,230 L240,200",
-    nombre: "Cundinamarca"
-  },
-  {
-    id: "GUAINIA",
-    path: "M380,260 L410,250 L440,270 L420,290 L380,280 L380,260",
-    nombre: "Guainía"
-  },
-  {
-    id: "GUAVIARE",
-    path: "M320,310 L350,300 L370,320 L350,340 L320,330 L320,310",
-    nombre: "Guaviare"
-  },
-  {
-    id: "HUILA",
-    path: "M230,300 L250,290 L270,300 L260,320 L240,320 L230,300",
-    nombre: "Huila"
-  },
-  {
-    id: "LA GUAJIRA",
-    path: "M220,130 L240,110 L260,120 L250,140 L220,130",
-    nombre: "La Guajira"
-  },
-  {
-    id: "MAGDALENA",
-    path: "M170,110 L200,120 L200,160 L170,190 L170,110",
-    nombre: "Magdalena"
-  },
-  {
-    id: "META",
-    path: "M270,230 L290,220 L320,230 L340,250 L320,270 L290,260 L270,230",
-    nombre: "Meta"
-  },
-  {
-    id: "NARIÑO",
-    path: "M150,340 L180,340 L200,360 L180,380 L150,360 L150,340",
-    nombre: "Nariño"
-  },
-  {
-    id: "NORTE DE SANTANDER",
-    path: "M230,160 L250,140 L270,150 L250,170 L230,160",
-    nombre: "Norte de Santander"
-  },
-  {
-    id: "PUTUMAYO",
-    path: "M200,360 L220,370 L240,360 L220,350 L200,360",
-    nombre: "Putumayo"
-  },
-  {
-    id: "QUINDIO",
-    path: "M220,280 L230,280 L230,290 L220,290 L220,280",
-    nombre: "Quindío"
-  },
-  {
-    id: "RISARALDA",
-    path: "M200,280 L220,280 L220,290 L200,290 L200,280",
-    nombre: "Risaralda"
-  },
-  {
-    id: "SAN ANDRES Y PROVIDENCIA",
-    path: "M40,80 L50,80 L50,90 L40,90 L40,80",
-    nombre: "San Andrés y Providencia"
-  },
-  {
-    id: "SANTANDER",
-    path: "M230,160 L250,170 L270,180 L250,200 L220,180 L210,180 L230,160",
-    nombre: "Santander"
-  },
-  {
-    id: "SUCRE",
-    path: "M130,180 L170,190 L140,220 L120,200 L130,180",
-    nombre: "Sucre"
-  },
-  {
-    id: "TOLIMA",
-    path: "M220,280 L240,260 L250,290 L230,300 L220,280",
-    nombre: "Tolima"
-  },
-  {
-    id: "VALLE DEL CAUCA",
-    path: "M180,290 L200,290 L200,310 L180,310 L180,290",
-    nombre: "Valle del Cauca"
-  },
-  {
-    id: "VAUPES",
-    path: "M350,340 L380,330 L400,350 L370,370 L350,340",
-    nombre: "Vaupés"
-  },
-  {
-    id: "VICHADA",
-    path: "M340,210 L370,200 L400,220 L390,240 L360,250 L340,210",
-    nombre: "Vichada"
-  }
-]
