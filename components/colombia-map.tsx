@@ -1,4 +1,3 @@
-
 "use client"
 
 import { useEffect, useState } from "react"
@@ -86,7 +85,7 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
           <SelectTrigger>
             <SelectValue placeholder="Tipo de hidrocarburo" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="z-[1000]">
             <SelectItem value="todos">Todos los tipos</SelectItem>
             <SelectItem value="PETROLEO">Petróleo</SelectItem>
             <SelectItem value="GAS">Gas</SelectItem>
@@ -98,7 +97,7 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
           <SelectTrigger>
             <SelectValue placeholder="Estado" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="z-[1000]">
             <SelectItem value="todos">Todos los estados</SelectItem>
             <SelectItem value="DESARROLLO">Desarrollo</SelectItem>
             <SelectItem value="PRODUCCION">Producción</SelectItem>
@@ -110,7 +109,7 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
           <SelectTrigger>
             <SelectValue placeholder="Área" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="z-[1000]">
             <SelectItem value="todos">Todas las áreas</SelectItem>
             <SelectItem value="pequeño">Pequeño (&lt;50 km²)</SelectItem>
             <SelectItem value="mediano">Mediano (50-200 km²)</SelectItem>
