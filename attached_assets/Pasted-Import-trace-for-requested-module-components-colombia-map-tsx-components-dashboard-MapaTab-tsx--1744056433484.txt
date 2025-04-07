@@ -1,0 +1,67 @@
+Import trace for requested module:
+./components/colombia-map.tsx
+./components/dashboard/MapaTab.tsx
+./components/dashboard.tsx
+./app/page.tsx
+ ⨯ ReferenceError: window is not defined
+    at (ssr)/./node_modules/.pnpm/leaflet@1.9.4/node_modules/leaflet/dist/leaflet-src.js (.next/server/vendor-chunks/leaflet@1.9.4.js:19:1)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at (ssr)/./node_modules/.pnpm/react-leaflet@5.0.0_leaflet@1.9.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/react-leaflet/lib/AttributionControl.js (.next/server/vendor-chunks/react-leaflet@5.0.0_leaflet@1.9.4_react-dom@19.1.0_react@19.1.0__react@19.1.0.js:20:1)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at (ssr)/./node_modules/.pnpm/react-leaflet@5.0.0_leaflet@1.9.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/react-leaflet/lib/index.js (.next/server/vendor-chunks/react-leaflet@5.0.0_leaflet@1.9.4_react-dom@19.1.0_react@19.1.0__react@19.1.0.js:250:1)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(ssr)/./components/colombia-map.tsx:7:71)
+    at (ssr)/./components/colombia-map.tsx (.next/server/app/page.js:152:1)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(ssr)/./components/dashboard/MapaTab.tsx:11:82)
+    at (ssr)/./components/dashboard/MapaTab.tsx (.next/server/app/page.js:196:1)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(ssr)/./components/dashboard.tsx:15:87)
+    at (ssr)/./components/dashboard.tsx (.next/server/app/page.js:163:1)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(ssr)/./app/page.tsx:9:79)
+    at (ssr)/./app/page.tsx (.next/server/app/page.js:130:1)
+    at Object.__webpack_require__ [as require] (.next/server/webpack-runtime.js:33:43)
+    at JSON.parse (<anonymous>) {
+  digest: '3221276583'
+}
+ ⨯ ReferenceError: window is not defined
+    at (ssr)/./node_modules/.pnpm/leaflet@1.9.4/node_modules/leaflet/dist/leaflet-src.js (.next/server/vendor-chunks/leaflet@1.9.4.js:19:1)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at (ssr)/./node_modules/.pnpm/react-leaflet@5.0.0_leaflet@1.9.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/react-leaflet/lib/AttributionControl.js (.next/server/vendor-chunks/react-leaflet@5.0.0_leaflet@1.9.4_react-dom@19.1.0_react@19.1.0__react@19.1.0.js:20:1)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at (ssr)/./node_modules/.pnpm/react-leaflet@5.0.0_leaflet@1.9.4_react-dom@19.1.0_react@19.1.0__react@19.1.0/node_modules/react-leaflet/lib/index.js (.next/server/vendor-chunks/react-leaflet@5.0.0_leaflet@1.9.4_react-dom@19.1.0_react@19.1.0__react@19.1.0.js:250:1)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(ssr)/./components/colombia-map.tsx:7:71)
+    at (ssr)/./components/colombia-map.tsx (.next/server/app/page.js:152:1)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(ssr)/./components/dashboard/MapaTab.tsx:11:82)
+    at (ssr)/./components/dashboard/MapaTab.tsx (.next/server/app/page.js:196:1)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(ssr)/./components/dashboard.tsx:15:87)
+    at (ssr)/./components/dashboard.tsx (.next/server/app/page.js:163:1)
+    at __webpack_require__ (.next/server/webpack-runtime.js:33:43)
+    at eval (webpack-internal:///(ssr)/./app/page.tsx:9:79)
+    at (ssr)/./app/page.tsx (.next/server/app/page.js:130:1)
+    at Object.__webpack_require__ [as require] (.next/server/webpack-runtime.js:33:43)
+    at JSON.parse (<anonymous>) {
+  digest: '3221276583'
+}
+ GET / 500 in 10286ms
+ GET / 500 in 28996ms
+ ⚠ ./components/colombia-map.tsx
+Attempted import error: 'Map' is not exported from 'react-leaflet' (imported as 'LeafletMap').
+
+Import trace for requested module:
+./components/colombia-map.tsx
+./components/dashboard/MapaTab.tsx
+./components/dashboard.tsx
+./app/page.tsx
+
+./components/colombia-map.tsx
+Attempted import error: 'Map' is not exported from 'react-leaflet' (imported as 'LeafletMap').
+
+Import trace for requested module:
+./components/colombia-map.tsx
+./components/dashboard/MapaTab.tsx
+./components/dashboard.tsx
