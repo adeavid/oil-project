@@ -22,7 +22,7 @@ export function MapaTab({ afectacionesPorDepartamento, umbralAfectacion }: MapaT
           <CardDescription>Distribución geográfica de afectaciones en la producción</CardDescription>
         </CardHeader>
         <CardContent className="p-4">
-          <div className="h-[700px] w-full border border-zinc-200 rounded-md overflow-hidden p-4 bg-white">
+          <div className="h-[700px] w-full border border-zinc-200 rounded-md overflow-hidden p-4">
             <ColombiaMap afectaciones={afectacionesPorDepartamento} />
           </div>
         </CardContent>
