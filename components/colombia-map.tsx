@@ -1,7 +1,6 @@
-
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { Droplet, Wind } from "lucide-react"
 import { ComposableMap, Geographies, Geography } from "react-simple-maps"
 import type { AfectacionesDepartamento } from "@/types"
@@ -18,6 +17,8 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
     BOPD: number
     KPCD: number
   } | null>(null)
+
+  const [position, setPosition] = useState({ coordinates: [-74, 4.5], zoom: 20 }) // Added zoom state
 
   const getColor = (departamento: string) => {
     if (!afectaciones[departamento]) return "#f4f4f5"
@@ -49,14 +50,24 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
     return "#f4f4f5"
   }
 
+  const handleZoomIn = useCallback(() => {
+    if (position.zoom >= 64) return
+    setPosition(pos => ({ ...pos, zoom: pos.zoom * 1.4 }))
+  }, [position.zoom])
+
+  const handleZoomOut = useCallback(() => {
+    if (position.zoom <= 8) return
+    setPosition(pos => ({ ...pos, zoom: pos.zoom / 1.4 }))
+  }, [position.zoom])
+
   return (
     <div className="grid grid-cols-3 gap-4 h-full">
       <div className="col-span-2">
         <ComposableMap
           projection="geoMercator"
           projectionConfig={{
-            scale: 2300,
-            center: [-74, 4.5],
+            scale: position.zoom * 100, // Make scale dynamic based on zoom
+            center: position.coordinates, // Center based on position state
           }}
           style={{
             width: "100%",
@@ -95,6 +106,8 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
             }
           </Geographies>
         </ComposableMap>
+        <button onClick={handleZoomIn}>Zoom In</button> {/* Added zoom buttons */}
+        <button onClick={handleZoomOut}>Zoom Out</button>
       </div>
       <div className="col-span-1">
         <Card className="h-full">
