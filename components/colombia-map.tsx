@@ -5,6 +5,7 @@ import { useEffect, useState } from "react"
 import { Droplet, Wind } from "lucide-react"
 import { ComposableMap, Geographies, Geography } from "react-simple-maps"
 import type { AfectacionesDepartamento } from "@/types"
+import { Card, CardContent } from "./ui/card"
 import coJson from "@/attached_assets/co.json"
 
 interface ColombiaMapProps {
@@ -12,21 +13,11 @@ interface ColombiaMapProps {
 }
 
 export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
-  const [tooltipInfo, setTooltipInfo] = useState<{
-    visible: boolean
-    x: number
-    y: number
+  const [selectedDep, setSelectedDep] = useState<{
     departamento: string
     BOPD: number
     KPCD: number
-  }>({
-    visible: false,
-    x: 0,
-    y: 0,
-    departamento: "",
-    BOPD: 0,
-    KPCD: 0,
-  })
+  } | null>(null)
 
   const getColor = (departamento: string) => {
     if (!afectaciones[departamento]) return "#f4f4f5"
@@ -59,87 +50,83 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
   }
 
   return (
-    <div className="relative w-full h-full">
-      <ComposableMap
-        projection="geoMercator"
-        projectionConfig={{
-          scale: 2300,
-          center: [-74, 4.5],
-        }}
-        style={{
-          width: "100%",
-          height: "100%",
-        }}
-      >
-        <Geographies geography={coJson}>
-          {({ geographies }) =>
-            geographies.map((geo) => {
-              const nombre = geo.properties?.name
-              return (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill={getColor(nombre)}
-                  stroke="#e4e4e7"
-                  strokeWidth={0.5}
-                  style={{
-                    default: { outline: "none" },
-                    hover: { outline: "none", stroke: "#71717a", strokeWidth: 1 },
-                    pressed: { outline: "none" }
-                  }}
-                  onMouseEnter={(e) => {
-                    const path = e.target
-                    const rect = path.getBoundingClientRect()
-                    const parentRect = path.closest(".relative")?.getBoundingClientRect() || { left: 0, top: 0 }
-                    
-                    setTooltipInfo({
-                      visible: true,
-                      x: rect.left - parentRect.left + rect.width/2,
-                      y: rect.top - parentRect.top + rect.height/2,
-                      departamento: nombre,
-                      BOPD: afectaciones[nombre]?.BOPD || 0,
-                      KPCD: afectaciones[nombre]?.KPCD || 0,
-                    })
-                  }}
-                  onMouseLeave={() => {
-                    setTooltipInfo(prev => ({ ...prev, visible: false }))
-                  }}
-                />
-              )
-            })
-          }
-        </Geographies>
-      </ComposableMap>
-
-      {tooltipInfo.visible && (
-        <div
-          className="absolute bg-white p-3 rounded-md shadow-lg border border-zinc-200 z-50 text-sm transform -translate-x-1/2 -translate-y-1/2"
+    <div className="grid grid-cols-3 gap-4 h-full">
+      <div className="col-span-2">
+        <ComposableMap
+          projection="geoMercator"
+          projectionConfig={{
+            scale: 2300,
+            center: [-74, 4.5],
+          }}
           style={{
-            left: `${tooltipInfo.x}px`,
-            top: `${tooltipInfo.y}px`,
-            pointerEvents: "none",
+            width: "100%",
+            height: "100%",
           }}
         >
-          <h4 className="font-bold text-zinc-800">{tooltipInfo.departamento}</h4>
-          <div className="mt-1 space-y-1">
-            {tooltipInfo.BOPD > 0 && (
-              <div className="flex items-center">
-                <Droplet className="h-4 w-4 mr-1 text-blue-500" />
-                <span>{tooltipInfo.BOPD.toLocaleString()} BOPD</span>
+          <Geographies geography={coJson}>
+            {({ geographies }) =>
+              geographies.map((geo) => {
+                const nombre = geo.properties?.name
+                return (
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    fill={getColor(nombre)}
+                    stroke="#e4e4e7"
+                    strokeWidth={0.5}
+                    style={{
+                      default: { outline: "none" },
+                      hover: { outline: "none", stroke: "#71717a", strokeWidth: 1 },
+                      pressed: { outline: "none" }
+                    }}
+                    onMouseEnter={() => {
+                      setSelectedDep({
+                        departamento: nombre,
+                        BOPD: afectaciones[nombre]?.BOPD || 0,
+                        KPCD: afectaciones[nombre]?.KPCD || 0,
+                      })
+                    }}
+                    onMouseLeave={() => {
+                      setSelectedDep(null)
+                    }}
+                  />
+                )
+              })
+            }
+          </Geographies>
+        </ComposableMap>
+      </div>
+      <div className="col-span-1">
+        <Card className="h-full">
+          <CardContent className="p-6">
+            {selectedDep ? (
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-zinc-900">{selectedDep.departamento}</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Droplet className="h-5 w-5 text-blue-500" />
+                    <div>
+                      <p className="text-sm text-zinc-500">Afectación BOPD</p>
+                      <p className="text-lg font-medium">{selectedDep.BOPD.toLocaleString()}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Wind className="h-5 w-5 text-green-500" />
+                    <div>
+                      <p className="text-sm text-zinc-500">Afectación KPCD</p>
+                      <p className="text-lg font-medium">{selectedDep.KPCD.toLocaleString()}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="h-full flex items-center justify-center text-zinc-500">
+                Seleccione un departamento para ver detalles
               </div>
             )}
-            {tooltipInfo.KPCD > 0 && (
-              <div className="flex items-center">
-                <Wind className="h-4 w-4 mr-1 text-green-500" />
-                <span>{tooltipInfo.KPCD.toLocaleString()} KPCD</span>
-              </div>
-            )}
-            {tooltipInfo.BOPD === 0 && tooltipInfo.KPCD === 0 && (
-              <div className="text-zinc-500">Sin afectaciones reportadas</div>
-            )}
-          </div>
-        </div>
-      )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
