@@ -34,9 +34,16 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
 
   useEffect(() => {
     const getData = async () => {
-      const response = await fetch('/attached_assets/campos_petroleros.geojson')
-      const data = await response.json()
-      setGeoJsonData(data)
+      try {
+        const response = await fetch('/campos_petroleros.geojson')
+        if (!response.ok) {
+          throw new Error('Failed to fetch GeoJSON')
+        }
+        const data = await response.json() 
+        setGeoJsonData(data)
+      } catch (error) {
+        console.error('Error loading GeoJSON:', error)
+      }
     }
     getData()
   }, [])

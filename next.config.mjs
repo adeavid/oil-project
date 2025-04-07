@@ -1,6 +1,19 @@
 
 let userConfig = undefined
 try {
+
+const nextConfig = {
+  output: 'standalone',
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.geojson$/,
+      use: ['json-loader'],
+      type: 'javascript/auto'
+    })
+    return config
+  }
+}
+
   userConfig = await import('./v0-user-next.config.mjs')
 } catch (e) {
   try {
