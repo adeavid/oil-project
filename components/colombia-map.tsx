@@ -28,7 +28,7 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
   })
 
   const getColor = (departamento: string) => {
-    if (!afectaciones[departamento]) return "#E5E7EB"
+    if (!afectaciones[departamento]) return "#fff"
 
     const maxBOPD = Math.max(...Object.values(afectaciones).map((a) => a.BOPD || 0))
     const maxKPCD = Math.max(...Object.values(afectaciones).map((a) => a.KPCD || 0))
@@ -54,13 +54,13 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
       return "#86EFAC"
     }
 
-    return "#E5E7EB"
+    return "#fff"
   }
 
   const handleMouseOver = (e: React.MouseEvent<SVGPathElement>, departamento: string) => {
     const path = e.currentTarget
+    path.style.stroke = "#555"
     path.style.strokeWidth = "2"
-    path.style.stroke = "#1F2937"
 
     const rect = svgRef.current!.getBoundingClientRect()
     const x = e.clientX - rect.left
@@ -78,8 +78,8 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
 
   const handleMouseOut = (e: React.MouseEvent<SVGPathElement>) => {
     const path = e.currentTarget
+    path.style.stroke = "#aaa"
     path.style.strokeWidth = "1"
-    path.style.stroke = "#6B7280"
     setTooltipInfo(prev => ({ ...prev, visible: false }))
   }
 
@@ -97,21 +97,46 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
   }
 
   return (
-    <div className="relative w-full h-full bg-white rounded-lg">
+    <div className="relative w-full h-full">
+      <style>
+        {`
+          .background {
+            fill: #eee;
+            pointer-events: all;
+          }
+          .map-layer {
+            fill: #fff;
+            stroke: #aaa;
+          }
+          .effect-layer {
+            pointer-events: none;
+          }
+          text {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 300;
+          }
+          text.big-text {
+            font-size: 30px;
+            font-weight: 400;
+          }
+          .effect-layer text, text.dummy-text {
+            font-size: 12px;
+          }
+        `}
+      </style>
       <svg
         ref={svgRef}
         viewBox="0 0 800 1000"
         className="w-full h-full"
         preserveAspectRatio="xMidYMid meet"
       >
-        <g transform="translate(100,100) scale(1.2)">
+        <rect className="background" width="800" height="1000" />
+        <g className="map-layer" transform="translate(100,100) scale(1.2)">
           {departamentos.map((depto) => (
             <path
               key={depto.id}
               d={depto.path}
               fill={getColor(depto.id)}
-              stroke="#6B7280"
-              strokeWidth="1"
               onMouseOver={(e) => handleMouseOver(e, depto.nombre)}
               onMouseOut={handleMouseOut}
               onMouseMove={handleMouseMove}
