@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useEffect, useState } from "react"
@@ -32,13 +33,54 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
   const [geoJsonData, setGeoJsonData] = useState<any>(null)
   const [filteredGeoJsonData, setFilteredGeoJsonData] = useState<any>(null)
 
+  // Test data for TIBU and SARDINATA
+  const testFields = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: {
+          CAMPO: "TIBU",
+          TIPO_HIDRO: "PETROLEO",
+          ESTADO: "VIGENTE",
+          AREA_KM2: 75,
+          AFECTACION: 100,
+          UNIDAD: "BOPD"
+        },
+        geometry: {
+          type: "Point",
+          coordinates: [-72.7358, 8.6489]
+        }
+      },
+      {
+        type: "Feature",
+        properties: {
+          CAMPO: "SARDINATA",
+          TIPO_HIDRO: "PETROLEO",
+          ESTADO: "EN TRAMITE",
+          AREA_KM2: 60,
+          AFECTACION: 100,
+          UNIDAD: "BOPD"
+        },
+        geometry: {
+          type: "Point",
+          coordinates: [-72.8042, 8.5833]
+        }
+      }
+    ]
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch('/campos_petroleros.geojson')
         const data = await response.json()
-        setGeoJsonData(data)
-        setFilteredGeoJsonData(data)
+        const combinedData = {
+          type: "FeatureCollection",
+          features: [...data.features, ...testFields.features]
+        }
+        setGeoJsonData(combinedData)
+        setFilteredGeoJsonData(combinedData)
       } catch (error) {
         console.error('Error loading GeoJSON:', error)
       }
@@ -160,6 +202,9 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
                     <p>Tipo: ${feature.properties.TIPO_HIDRO}</p>
                     <p>Estado: ${feature.properties.ESTADO}</p>
                     <p>Área: ${feature.properties.AREA_KM2.toFixed(2)} km²</p>
+                    ${feature.properties.AFECTACION ? 
+                      `<p>Afectación: ${feature.properties.AFECTACION} ${feature.properties.UNIDAD}</p>` 
+                      : ''}
                   </div>
                 `
                 layer.bindPopup(popupContent)
