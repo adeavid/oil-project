@@ -1,3 +1,4 @@
+
 "use client"
 
 import { useEffect, useState } from "react"
@@ -5,6 +6,7 @@ import dynamic from 'next/dynamic'
 import type { AfectacionesDepartamento } from "@/types"
 import "leaflet/dist/leaflet.css"
 
+// Dynamically import Leaflet components with no SSR
 const MapContainer = dynamic(
   () => import('react-leaflet').then((mod) => mod.MapContainer),
   { ssr: false }
@@ -43,7 +45,8 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await import("@/attached_assets/campos_petroleros.geojson")
+      const response = await fetch('/attached_assets/campos_petroleros.geojson')
+      const data = await response.json()
       setGeoJsonData(data)
     }
     getData()
