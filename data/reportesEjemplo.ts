@@ -7,6 +7,48 @@ function crearFecha(año: number, mes: number, dia: number): Date {
 
 // Datos de ejemplo para la tabla (últimos 10 días: 27 de marzo a 7 de abril de 2025)
 export const reportesEjemplo: Reporte[] = [
+  {
+    id: 25,
+    fecha: crearFecha(2025, 4, 7),
+    campo: "TIBU",
+    tipoNovedad: "Falla mecánica",
+    descripcion: "Falla en sistema de bombeo principal",
+    afectacion: 100,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "NORTE DE SANTANDER",
+    municipio: "TIBU",
+    fechaReporte: crearFecha(2025, 4, 7),
+    fechaAfectacion: crearFecha(2025, 4, 7),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 7),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
+  {
+    id: 26,
+    fecha: crearFecha(2025, 4, 7),
+    campo: "SARDINATA", 
+    tipoNovedad: "Mantenimiento",
+    descripcion: "Mantenimiento preventivo programado",
+    afectacion: 100,
+    unidad: "BOPD",
+    operador: "ECOPETROL S.A.",
+    departamento: "NORTE DE SANTANDER", 
+    municipio: "SARDINATA",
+    fechaReporte: crearFecha(2025, 4, 7),
+    fechaAfectacion: crearFecha(2025, 4, 7),
+    historial: [
+      {
+        fecha: crearFecha(2025, 4, 7),
+        descripcion: "Reporte creado",
+        camposModificados: [],
+      },
+    ],
+  },
   // 27 de marzo
   {
     id: 1,

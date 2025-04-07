@@ -100,7 +100,7 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
           return false
         }
 
-        if (filtroEstado !== "todos" && props.ESTADO !== filtroEstado) {
+        if (filtroEstado !== "todos" && props.ESTADO_RUTY !== filtroEstado) {
           return false
         }
 
@@ -124,6 +124,11 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
 
     setFilteredGeoJsonData(filtered)
   }, [geoJsonData, filtroTipo, filtroEstado, filtroArea])
+
+  // Get report data for a field
+  const getReporteField = (fieldName: string) => {
+    return reportes.find(r => r.campo === fieldName)
+  }
 
   const getColor = (feature: any) => {
     const props = feature.properties
@@ -200,8 +205,15 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
                   <div class="p-2">
                     <h3 class="font-bold">${feature.properties.CAMPO}</h3>
                     <p>Tipo: ${feature.properties.TIPO_HIDRO}</p>
-                    <p>Estado: ${feature.properties.ESTADO}</p>
+                    <p>Estado: ${feature.properties.ESTADO_RUTY}</p>
                     <p>Área: ${feature.properties.AREA_KM2.toFixed(2)} km²</p>
+                    ${(() => {
+                      const reporte = reportes.find(r => r.campo === feature.properties.CAMPO)
+                      return reporte ? 
+                        `<p class="mt-2 font-bold text-red-600">Afectación: ${reporte.afectacion} ${reporte.unidad}</p>
+                         <p class="text-sm">${reporte.descripcion}</p>` 
+                        : ''
+                    })()}
                     ${feature.properties.AFECTACION ? 
                       `<p>Afectación: ${feature.properties.AFECTACION} ${feature.properties.UNIDAD}</p>` 
                       : ''}
