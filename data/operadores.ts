@@ -1,10 +1,169 @@
-import type { Operador } from "@/types"
+import type { Operador } from "@/types";
 
 // Lista de operadores para filtrar
 export const operadoresList: Operador[] = [
-  { value: "todos", label: "Todos los operadores" },
-  { value: "ECOPETROL S.A.", label: "ECOPETROL S.A." },
-  { value: "OCCIDENTAL DE COLOMBIA", label: "OCCIDENTAL DE COLOMBIA" },
-  { value: "CNEOG COLOMBIA SUCURSAL COLOMBIA", label: "CNEOG COLOMBIA" },
-]
-
+  {
+    value: "todos",
+    label: "Todos los operadores",
+  },
+  {
+    value: "AMERISUR EXPLORACION COLOMBIA LIMITADA",
+    label: "AMERISUR EXPLORACION COLOMBIA LIMITADA",
+  },
+  {
+    value: "ANDES OPERATING COMPANY LLC SUCURSAL COLOMBIA",
+    label: "ANDES OPERATING COMPANY LLC SUCURSAL COLOMBIA",
+  },
+  {
+    value: "CANACOL ENERGY COLOMBIA SAS",
+    label: "CANACOL ENERGY COLOMBIA SAS",
+  },
+  {
+    value: "CARRAO ENERGY S.A. SUCURSAL COLOMBIA",
+    label: "CARRAO ENERGY S.A. SUCURSAL COLOMBIA",
+  },
+  {
+    value: "COLOMBIA ENERGY DEVELOPMENT CO",
+    label: "COLOMBIA ENERGY DEVELOPMENT CO",
+  },
+  {
+    value: "ECOPETROL S.A.",
+    label: "ECOPETROL S.A.",
+  },
+  {
+    value: "EMERALD ENERGY PLC SUCURSAL COLOMBIA",
+    label: "EMERALD ENERGY PLC SUCURSAL COLOMBIA",
+  },
+  {
+    value: "FRONTERA ENERGY COLOMBIA CORP., SUCURSAL COLOMBIA",
+    label: "FRONTERA ENERGY COLOMBIA CORP., SUCURSAL COLOMBIA",
+  },
+  {
+    value: "GEOPARK COLOMBIA S.A.S.",
+    label: "GEOPARK COLOMBIA S.A.S.",
+  },
+  {
+    value: "GRAN TIERRA ENERGY COLOMBIA GMBH SUCURSAL COLOMBIA",
+    label: "GRAN TIERRA ENERGY COLOMBIA GMBH SUCURSAL COLOMBIA",
+  },
+  {
+    value: "GRAN TIERRA OPERATIONS COLOMBIA GMBH SUCURSAL",
+    label: "GRAN TIERRA OPERATIONS COLOMBIA GMBH SUCURSAL",
+  },
+  {
+    value: "GREEN POWER SUCURSAL COLOMBIA",
+    label: "GREEN POWER SUCURSAL COLOMBIA",
+  },
+  {
+    value: "HOCOL S.A.",
+    label: "HOCOL S.A.",
+  },
+  {
+    value: "HUPECOL OPERATING CO LLC",
+    label: "HUPECOL OPERATING CO LLC",
+  },
+  {
+    value: "IBEROAMERICANA DE HIDROCARBUROS ENERGY COLOMBIA S.A.S",
+    label: "IBEROAMERICANA DE HIDROCARBUROS ENERGY COLOMBIA S.A.S",
+  },
+  {
+    value: "INTEROIL COLOMBIA EXPLORATION AND PRODUCTION",
+    label: "INTEROIL COLOMBIA EXPLORATION AND PRODUCTION",
+  },
+  {
+    value: "INVEPETROL LIMITED COLOMBIA",
+    label: "INVEPETROL LIMITED COLOMBIA",
+  },
+  {
+    value: "LEWIS ENERGY COLOMBIA INC",
+    label: "LEWIS ENERGY COLOMBIA INC",
+  },
+  {
+    value: "MANSAROVAR ENERGY COLOMBIA LTD",
+    label: "MANSAROVAR ENERGY COLOMBIA LTD",
+  },
+  {
+    value: "MKMS ENERJI SUCURSAL COLOMBIA",
+    label: "MKMS ENERJI SUCURSAL COLOMBIA",
+  },
+  {
+    value: "MONTAJES JM S.A.",
+    label: "MONTAJES JM S.A.",
+  },
+  {
+    value: "NEW GRANADA ENERGY CORPORATION SUCURSAL COLOMBIA",
+    label: "NEW GRANADA ENERGY CORPORATION SUCURSAL COLOMBIA",
+  },
+  {
+    value: "OIRU CORPORATION",
+    label: "OIRU CORPORATION",
+  },
+  {
+    value: "ONGC VIDESH LIMITED SUCURSAL COLOMBIANA",
+    label: "ONGC VIDESH LIMITED SUCURSAL COLOMBIANA",
+  },
+  {
+    value: "PAREX RESOURCES COLOMBIA LTD. SUCURSAL",
+    label: "PAREX RESOURCES COLOMBIA LTD. SUCURSAL",
+  },
+  {
+    value: "PERENCO COLOMBIA LIMITED",
+    label: "PERENCO COLOMBIA LIMITED",
+  },
+  {
+    value: "PERENCO OIL AND GAS COLOMBIA LIMITED.",
+    label: "PERENCO OIL AND GAS COLOMBIA LIMITED.",
+  },
+  {
+    value: "PETROLEOS COLOMBIANOS SA",
+    label: "PETROLEOS COLOMBIANOS SA",
+  },
+  {
+    value: "PETROLEOS SUD AMERICANOS SUCURSAL COLOMBIA",
+    label: "PETROLEOS SUD AMERICANOS SUCURSAL COLOMBIA",
+  },
+  {
+    value: "PETROSANTANDER (COLOMBIA) INC.",
+    label: "PETROSANTANDER (COLOMBIA) INC.",
+  },
+  {
+    value: "SAINT AUBIN INTERNATIONAL SAS",
+    label: "SAINT AUBIN INTERNATIONAL SAS",
+  },
+  {
+    value: "SAN AGUSTIN ENERGY CORP SUCURSAL COLOMBIA",
+    label: "SAN AGUSTIN ENERGY CORP SUCURSAL COLOMBIA",
+  },
+  {
+    value: "SIERRACOL ENERGY ARAUCA LLC",
+    label: "SIERRACOL ENERGY ARAUCA LLC",
+  },
+  {
+    value: "SUELOPETROL, C.A. SUCURSAL COLOMBIA",
+    label: "SUELOPETROL, C.A. SUCURSAL COLOMBIA",
+  },
+  {
+    value: "TECPETROL COLOMBIA SAS",
+    label: "TECPETROL COLOMBIA SAS",
+  },
+  {
+    value: "TOC ENERGIA SUCURSAL COLOMBIA",
+    label: "TOC ENERGIA SUCURSAL COLOMBIA",
+  },
+  {
+    value: "TPL COLOMBIA LTD - SUCURSAL COLOMBIA",
+    label: "TPL COLOMBIA LTD - SUCURSAL COLOMBIA",
+  },
+  {
+    value: "UNION TEMPORAL OMEGA ENERGY",
+    label: "UNION TEMPORAL OMEGA ENERGY",
+  },
+  {
+    value: "VERANO ENERGY (SWITZERLAND) AG SUCURSAL",
+    label: "VERANO ENERGY (SWITZERLAND) AG SUCURSAL",
+  },
+  {
+    value: "VETRA EXPLORACION Y PRODUCCION COLOMBIA S.A.S. ",
+    label: "VETRA EXPLORACION Y PRODUCCION COLOMBIA S.A.S. ",
+  },
+];

@@ -1,14 +1,17 @@
 // Tipos de novedades
 export const tiposNovedad = [
-  "Falla mecánica",
-  "Fuga",
-  "Suspensión",
-  "Paro programado",
-  "Problema eléctrico",
+  "Yacimiento",
+  "Falla en pozo",
+  "Facilidades",
+  "Seguridad física",
+  "Transporte",
+  "Comercialización",
+  "Eléctrico",
   "Mantenimiento",
-  "Comunidades",
   "Orden público",
-  "Otro",
+  "Ambiental",
+  "Emergencia sanitaria",
+  "Comunidades"
 ]
 
 // Unidades
