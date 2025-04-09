@@ -17,7 +17,7 @@ export function MapaTab({ afectacionesPorDepartamento, umbralAfectacion }: MapaT
         <CardHeader className="bg-zinc-50 border-b border-zinc-100">
           <CardTitle className="text-lg flex items-center">
             <MapPin className="h-5 w-5 mr-2 text-zinc-500" />
-            Mapa de Afectaciones por Departamento
+            Mapa de Afectaciones por Campo
           </CardTitle>
           <CardDescription>Distribución geográfica de afectaciones en la producción</CardDescription>
         </CardHeader>

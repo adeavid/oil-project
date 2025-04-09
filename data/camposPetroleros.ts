@@ -1151,8 +1151,8 @@ export const camposPetroleros: CampoPetrolero[] = [
     "label": "TESORO"
   },
   {
-    "value": "TIBÚ",
-    "label": "TIBÚ"
+    "value": "TIBU",
+    "label": "TIBU"
   },
   {
     "value": "TIGANA ",
@@ -3034,7 +3034,7 @@ export const datosAutocompletados: Record<string, DatosAutocompletados> = {
     departamento: "SANTANDER",
     operador: "ECOPETROL S.A.",
   },
-  TIBÚ: {
+  TIBU: {
     contrato: "TIBU",
     municipio: "TIBU",
     departamento: "NORTE DE SANTANDER",
