@@ -43,7 +43,7 @@ export default function Dashboard() {
             variant="outline" 
             className="h-10"
             onClick={() => {
-              const XLSX = require('xlsx');
+              const XLSX = await import('xlsx');
               
               // Preparar datos para exportar
               const data = reportes.map(reporte => ({
