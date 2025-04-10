@@ -21,7 +21,19 @@ export function ReportesProvider({ children }: { children: ReactNode }) {
     // Cargar reportes de localStorage
     const reportesGuardados = localStorage.getItem('reportes')
     if (reportesGuardados) {
-      setReportes(JSON.parse(reportesGuardados))
+      const parsed = JSON.parse(reportesGuardados)
+      // Convertir strings de fecha a objetos Date
+      const reportesConFechas = parsed.map((reporte: any) => ({
+        ...reporte,
+        fecha: new Date(reporte.fecha),
+        fechaReporte: new Date(reporte.fechaReporte),
+        fechaAfectacion: new Date(reporte.fechaAfectacion),
+        historial: reporte.historial.map((h: any) => ({
+          ...h,
+          fecha: new Date(h.fecha)
+        }))
+      }))
+      setReportes(reportesConFechas)
     } else {
       // Si no hay datos, usar los ejemplos
       setReportes(reportesEjemplo)
