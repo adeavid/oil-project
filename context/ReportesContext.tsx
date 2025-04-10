@@ -1,11 +1,9 @@
+
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 import type { Reporte, HistorialCambio } from "@/types"
 import { reportesEjemplo } from "@/data/reportesEjemplo"
-import Database from "@replit/database"
-
-const db = new Database()
 
 interface ReportesContextType {
   reportes: Reporte[]
@@ -20,9 +18,10 @@ export function ReportesProvider({ children }: { children: ReactNode }) {
   const [reportes, setReportes] = useState<Reporte[]>([])
 
   useEffect(() => {
-    db.get("reportes").then((data: any) => {
-      if (data) {
-        const parsed = JSON.parse(data)
+    if (typeof window !== 'undefined') {
+      const savedReportes = localStorage.getItem('reportes')
+      if (savedReportes) {
+        const parsed = JSON.parse(savedReportes)
         const reportesData = parsed.map((reporte: any) => ({
           ...reporte,
           fecha: new Date(reporte.fecha),
@@ -37,12 +36,12 @@ export function ReportesProvider({ children }: { children: ReactNode }) {
       } else {
         setReportes(reportesEjemplo)
       }
-    })
+    }
   }, [])
 
   useEffect(() => {
-    if (reportes.length > 0) {
-      db.set("reportes", JSON.stringify(reportes))
+    if (typeof window !== 'undefined' && reportes.length > 0) {
+      localStorage.setItem('reportes', JSON.stringify(reportes))
     }
   }, [reportes])
 
