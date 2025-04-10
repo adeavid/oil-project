@@ -589,21 +589,18 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
                       <div class="mt-2 p-2 bg-red-50 rounded">
                         <p class="font-bold text-red-600">Afectación: ${reporte.afectacion} ${reporte.unidad}</p>
                         <p class="text-sm mt-1">${reporte.descripcion}</p>
-                        <p class="text-xs mt-1 text-gray-600">Fecha: ${new Date(reporte.fechaAfectacion).toLocaleDateString()}</p>
+                        <p class="text-xs mt-1 text-gray-600">Fecha: ${reporte.fechaAfectacion ? new Date(reporte.fechaAfectacion).toLocaleDateString() : 'No especificada'}</p>
                       </div>
                     ` : ''}
                   </div>
                 `
                 layer.bindPopup(popupContent)
                 
-                // Cambiar el estilo si hay afectación
-                if (reporte) {
-                  layer.setStyle({
-                    fillColor: '#ef4444',
+                return {
+                    fillColor: reporte ? '#ef4444' : getColor(feature),
                     fillOpacity: 0.6,
                     weight: 2,
-                    color: '#b91c1c'
-                  })
+                    color: reporte ? '#b91c1c' : getColor(feature)
                 }
               }}
             />
