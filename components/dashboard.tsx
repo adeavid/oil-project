@@ -39,7 +39,54 @@ export default function Dashboard() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
         <h2 className="text-2xl font-bold text-zinc-800">Dashboard de Novedades</h2>
         <div className="flex gap-2">
-          <Button variant="outline" className="h-10">
+          <Button 
+            variant="outline" 
+            className="h-10"
+            onClick={() => {
+              const XLSX = require('xlsx');
+              
+              // Preparar datos para exportar
+              const data = reportes.map(reporte => ({
+                Fecha: new Date(reporte.fecha).toLocaleDateString(),
+                Campo: reporte.campo,
+                'Tipo de Novedad': reporte.tipoNovedad,
+                Descripción: reporte.descripcion,
+                Afectación: reporte.afectacion,
+                Unidad: reporte.unidad,
+                Operador: reporte.operador,
+                Departamento: reporte.departamento,
+                Municipio: reporte.municipio,
+                'Fecha de Reporte': new Date(reporte.fechaReporte).toLocaleDateString(),
+                'Fecha de Afectación': new Date(reporte.fechaAfectacion).toLocaleDateString()
+              }));
+
+              // Crear libro de trabajo
+              const wb = XLSX.utils.book_new();
+              const ws = XLSX.utils.json_to_sheet(data);
+
+              // Ajustar anchos de columna
+              const colWidths = [
+                { wch: 12 }, // Fecha
+                { wch: 20 }, // Campo
+                { wch: 20 }, // Tipo de Novedad
+                { wch: 50 }, // Descripción
+                { wch: 12 }, // Afectación
+                { wch: 8 },  // Unidad
+                { wch: 30 }, // Operador
+                { wch: 20 }, // Departamento
+                { wch: 20 }, // Municipio
+                { wch: 12 }, // Fecha de Reporte
+                { wch: 12 }  // Fecha de Afectación
+              ];
+              ws['!cols'] = colWidths;
+
+              // Agregar hoja al libro
+              XLSX.utils.book_append_sheet(wb, ws, "Reporte de Novedades");
+
+              // Guardar archivo
+              XLSX.writeFile(wb, "reporte-novedades.xlsx");
+            }}
+          >
             <Download className="mr-2 h-4 w-4" />
             Exportar a Excel
           </Button>
