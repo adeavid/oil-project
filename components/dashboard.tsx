@@ -42,7 +42,7 @@ export default function Dashboard() {
           <Button 
             variant="outline" 
             className="h-10"
-            onClick={() => {
+            onClick={async () => {
               const XLSX = await import('xlsx');
               
               // Preparar datos para exportar
