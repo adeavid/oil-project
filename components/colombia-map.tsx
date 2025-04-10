@@ -578,19 +578,38 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
                 fillOpacity: 0.6
               })}
               onEachFeature={(feature, layer) => {
-                const reporte = reportes.find(r => r.campo === feature.properties.CAMPO)
+                const fieldReportes = reportes.filter(r => r.campo === feature.properties.CAMPO);
+                const latestReporte = fieldReportes.length > 0 ? 
+                  fieldReportes.reduce((a, b) => new Date(a.fechaAfectacion) > new Date(b.fechaAfectacion) ? a : b) 
+                  : null;
+                
+                // Calculate historical sums by unit type
+                const historicalSums = fieldReportes.reduce((sums, r) => {
+                  sums[r.unidad] = (sums[r.unidad] || 0) + r.afectacion;
+                  return sums;
+                }, {} as Record<string, number>);
+
                 let popupContent = `
                   <div class="p-2">
                     <h3 class="font-bold">${feature.properties.CAMPO}</h3>
                     <p>Tipo: ${feature.properties.TIPO_HIDRO}</p>
                     <p>Estado: ${feature.properties.ESTADO_RUTY || 'No especificado'}</p>
                     <p>Área: ${feature.properties.AREA_KM2?.toFixed(2) || 0} km²</p>
-                    ${reporte ? `
+                    ${latestReporte ? `
                       <div class="mt-2 p-2 bg-red-50 rounded">
-                        <p class="font-bold text-red-600">Afectación: ${reporte.afectacion} ${reporte.unidad}</p>
-                        <p class="text-sm mt-1">${reporte.descripcion}</p>
-                        <p class="text-xs mt-1 text-gray-600">Fecha: ${reporte.fechaAfectacion ? new Date(reporte.fechaAfectacion).toLocaleDateString() : 'No especificada'}</p>
+                        <p class="font-semibold text-zinc-700">Última afectación:</p>
+                        <p class="font-bold text-red-600">${latestReporte.afectacion} ${latestReporte.unidad}</p>
+                        <p class="text-sm mt-1">${latestReporte.descripcion}</p>
+                        <p class="text-xs mt-1 text-gray-600">Fecha: ${latestReporte.fechaAfectacion ? new Date(latestReporte.fechaAfectacion).toLocaleDateString() : 'No especificada'}</p>
                       </div>
+                      ${Object.keys(historicalSums).length > 0 ? `
+                        <div class="mt-2 p-2 bg-zinc-50 rounded">
+                          <p class="font-semibold text-zinc-700">Total histórico:</p>
+                          ${Object.entries(historicalSums).map(([unit, sum]) => 
+                            `<p class="text-sm font-bold text-zinc-600">${sum.toLocaleString()} ${unit}</p>`
+                          ).join('')}
+                        </div>
+                      ` : ''}
                     ` : ''}
                   </div>
                 `
