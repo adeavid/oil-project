@@ -1,13 +1,8 @@
-
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 import type { Reporte, HistorialCambio } from "@/types"
 import { reportesEjemplo } from "@/data/reportesEjemplo"
-import { Storage } from '@google-cloud/storage'
-
-const BUCKET_NAME = process.env.NEXT_PUBLIC_BUCKET_ID || 'default-bucket'
-const FILE_NAME = 'reportes.json'
 
 interface ReportesContextType {
   reportes: Reporte[]
@@ -18,18 +13,13 @@ interface ReportesContextType {
 
 const ReportesContext = createContext<ReportesContextType | undefined>(undefined)
 
-const storage = new Storage()
-const bucket = storage.bucket(BUCKET_NAME)
-
 async function guardarReportes(reportes: Reporte[]) {
   try {
-    const file = bucket.file(FILE_NAME)
-    await file.save(JSON.stringify(reportes, (key, value) => {
-      if (value instanceof Date) {
-        return value.toISOString()
-      }
-      return value
-    }))
+    const response = await fetch(process.env.REPLIT_DB_URL + '/reportes', {
+      method: 'POST',
+      body: JSON.stringify(reportes)
+    });
+    if (!response.ok) throw new Error('Error al guardar reportes');
   } catch (error) {
     console.error('Error al guardar reportes:', error)
   }
@@ -37,17 +27,13 @@ async function guardarReportes(reportes: Reporte[]) {
 
 async function cargarReportes(): Promise<Reporte[]> {
   try {
-    const file = bucket.file(FILE_NAME)
-    const exists = await file.exists()
-    
-    if (!exists[0]) {
-      await guardarReportes(reportesEjemplo)
-      return reportesEjemplo
-    }
+    const response = await fetch(process.env.REPLIT_DB_URL + '/reportes');
+    if (!response.ok) return reportesEjemplo;
 
-    const [content] = await file.download()
-    const reportesData = JSON.parse(content.toString())
-    
+    const data = await response.text();
+    if (!data) return reportesEjemplo;
+
+    const reportesData = JSON.parse(data);
     return reportesData.map((reporte: any) => ({
       ...reporte,
       fecha: new Date(reporte.fecha),
@@ -57,10 +43,10 @@ async function cargarReportes(): Promise<Reporte[]> {
         ...h,
         fecha: new Date(h.fecha)
       }))
-    }))
+    }));
   } catch (error) {
-    console.error('Error al cargar reportes:', error)
-    return reportesEjemplo
+    console.error('Error al cargar reportes:', error);
+    return reportesEjemplo;
   }
 }
 
