@@ -614,7 +614,9 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
                   </div>
                 `
                 layer.bindPopup(popupContent)
-                
+              }}
+              style={(feature) => {
+                const reporte = reportes.find(r => r.campo === feature.properties?.CAMPO)
                 return {
                     fillColor: reporte ? '#ef4444' : getColor(feature),
                     fillOpacity: 0.6,
