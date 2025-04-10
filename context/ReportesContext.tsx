@@ -1,6 +1,7 @@
+
 "use client"
 
-import { createContext, useContext, useState, type ReactNode } from "react"
+import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 import type { Reporte, HistorialCambio } from "@/types"
 import { reportesEjemplo } from "@/data/reportesEjemplo"
 
@@ -14,7 +15,34 @@ interface ReportesContextType {
 const ReportesContext = createContext<ReportesContextType | undefined>(undefined)
 
 export function ReportesProvider({ children }: { children: ReactNode }) {
-  const [reportes, setReportes] = useState<Reporte[]>(reportesEjemplo)
+  const [reportes, setReportes] = useState<Reporte[]>([])
+
+  // Cargar datos del localStorage al iniciar
+  useEffect(() => {
+    const datosGuardados = localStorage.getItem('reportesNovedades')
+    if (datosGuardados) {
+      const reportesParsed = JSON.parse(datosGuardados).map((reporte: any) => ({
+        ...reporte,
+        fecha: new Date(reporte.fecha),
+        fechaReporte: new Date(reporte.fechaReporte),
+        fechaAfectacion: new Date(reporte.fechaAfectacion),
+        historial: reporte.historial.map((h: any) => ({
+          ...h,
+          fecha: new Date(h.fecha)
+        }))
+      }))
+      setReportes(reportesParsed)
+    } else {
+      setReportes(reportesEjemplo)
+    }
+  }, [])
+
+  // Guardar datos en localStorage cuando cambien
+  useEffect(() => {
+    if (reportes.length > 0) {
+      localStorage.setItem('reportesNovedades', JSON.stringify(reportes))
+    }
+  }, [reportes])
 
   const agregarReporte = (reporte: Reporte) => {
     setReportes((prevReportes) => [reporte, ...prevReportes])
@@ -24,7 +52,6 @@ export function ReportesProvider({ children }: { children: ReactNode }) {
     setReportes((prevReportes) =>
       prevReportes.map((reporte) => {
         if (reporte.id === id) {
-          // Crear nuevo historial
           const nuevoHistorial: HistorialCambio = {
             fecha: new Date(),
             descripcion: "Reporte editado",
@@ -60,4 +87,3 @@ export function useReportes() {
   }
   return context
 }
-
