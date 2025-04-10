@@ -1,3 +1,4 @@
+
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
@@ -18,19 +19,19 @@ const ReportesContext = createContext<ReportesContextType | undefined>(undefined
 
 async function guardarReportes(reportes: Reporte[]) {
   try {
-    await db.set('reportes', reportes);
-    console.log('Reportes guardados exitosamente');
+    await db.set('reportes', JSON.stringify(reportes))
+    console.log('Reportes guardados exitosamente')
   } catch (error) {
-    console.error('Error al guardar reportes:', error);
+    console.error('Error al guardar reportes:', error)
   }
 }
 
 async function cargarReportes(): Promise<Reporte[]> {
   try {
-    const data = await db.get('reportes');
-    if (!data) return reportesEjemplo;
+    const data = await db.get('reportes')
+    if (!data) return reportesEjemplo
 
-    const reportesData = JSON.parse(data);
+    const reportesData = JSON.parse(data)
     return reportesData.map((reporte: any) => ({
       ...reporte,
       fecha: new Date(reporte.fecha),
@@ -40,10 +41,10 @@ async function cargarReportes(): Promise<Reporte[]> {
         ...h,
         fecha: new Date(h.fecha)
       }))
-    }));
+    }))
   } catch (error) {
-    console.error('Error al cargar reportes:', error);
-    return reportesEjemplo;
+    console.error('Error al cargar reportes:', error)
+    return reportesEjemplo
   }
 }
 
