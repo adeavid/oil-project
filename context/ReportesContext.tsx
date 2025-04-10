@@ -73,6 +73,52 @@ export function ReportesProvider({ children }: { children: ReactNode }) {
     setReportes((prevReportes) => prevReportes.filter((reporte) => reporte.id !== id))
   }
 
+  // Función de prueba
+  const probarBaseDatos = () => {
+    // 1. Agregar un nuevo reporte
+    const nuevoReporte: Reporte = {
+      id: Date.now(),
+      campo: "Campo de Prueba",
+      tipoNovedad: "Mantenimiento",
+      descripcion: "Reporte de prueba",
+      fechaAfectacion: new Date(),
+      unidad: "BOPD",
+      afectacion: 100,
+      fechaReporte: new Date(),
+      fecha: new Date(),
+      operador: "Operador de Prueba",
+      departamento: "Departamento de Prueba",
+      municipio: "Municipio de Prueba",
+      historial: [
+        {
+          fecha: new Date(),
+          descripcion: "Reporte de prueba creado",
+          camposModificados: [],
+        },
+      ],
+    }
+    
+    agregarReporte(nuevoReporte)
+    console.log("✅ Reporte agregado:", nuevoReporte)
+    
+    // 2. Verificar que se guardó en localStorage
+    const datosGuardados = localStorage.getItem('reportes')
+    console.log("✅ Datos en localStorage:", datosGuardados ? JSON.parse(datosGuardados) : null)
+    
+    // 3. Eliminar el reporte de prueba
+    eliminarReporte(nuevoReporte.id)
+    console.log("✅ Reporte eliminado")
+    
+    // 4. Verificar que se actualizó localStorage
+    const datosActualizados = localStorage.getItem('reportes')
+    console.log("✅ Datos actualizados en localStorage:", datosActualizados ? JSON.parse(datosActualizados) : null)
+  }
+
+  // Ejecutar prueba al cargar
+  useEffect(() => {
+    probarBaseDatos()
+  }, [])
+
   return (
     <ReportesContext.Provider value={{ reportes, agregarReporte, actualizarReporte, eliminarReporte }}>
       {children}
