@@ -3,6 +3,9 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 import type { Reporte, HistorialCambio } from "@/types"
 import { reportesEjemplo } from "@/data/reportesEjemplo"
+import Database from "@replit/database"
+
+const db = new Database()
 
 interface ReportesContextType {
   reportes: Reporte[]
@@ -15,36 +18,16 @@ const ReportesContext = createContext<ReportesContextType | undefined>(undefined
 
 async function guardarReportes(reportes: Reporte[]) {
   try {
-    if (!process.env.REPLIT_DB_URL) {
-      console.error('REPLIT_DB_URL no está definida');
-      return;
-    }
-    console.log('Guardando en:', process.env.REPLIT_DB_URL);
-    const response = await fetch(process.env.REPLIT_DB_URL, {
-      method: 'POST',
-      body: `reportes=${encodeURIComponent(JSON.stringify(reportes))}`
-    });
-    if (!response.ok) throw new Error(`Error al guardar reportes: ${response.status}`);
+    await db.set('reportes', reportes);
     console.log('Reportes guardados exitosamente');
   } catch (error) {
-    console.error('Error al guardar reportes:', error)
+    console.error('Error al guardar reportes:', error);
   }
 }
 
 async function cargarReportes(): Promise<Reporte[]> {
   try {
-    if (!process.env.REPLIT_DB_URL) {
-      console.error('REPLIT_DB_URL no está definida');
-      return reportesEjemplo;
-    }
-    console.log('Cargando desde:', process.env.REPLIT_DB_URL);
-    const response = await fetch(`${process.env.REPLIT_DB_URL}/reportes`);
-    if (!response.ok) {
-      console.error('Error al cargar reportes:', response.status);
-      return reportesEjemplo;
-    }
-
-    const data = await response.text();
+    const data = await db.get('reportes');
     if (!data) return reportesEjemplo;
 
     const reportesData = JSON.parse(data);
