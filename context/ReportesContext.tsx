@@ -1,4 +1,3 @@
-
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
@@ -17,47 +16,33 @@ interface ReportesContextType {
 
 const ReportesContext = createContext<ReportesContextType | undefined>(undefined)
 
-async function guardarReportes(reportes: Reporte[]) {
-  try {
-    await db.set('reportes', JSON.stringify(reportes))
-    console.log('Reportes guardados exitosamente')
-  } catch (error) {
-    console.error('Error al guardar reportes:', error)
-  }
-}
-
-async function cargarReportes(): Promise<Reporte[]> {
-  try {
-    const data = await db.get('reportes')
-    if (!data) return reportesEjemplo
-
-    const reportesData = JSON.parse(data)
-    return reportesData.map((reporte: any) => ({
-      ...reporte,
-      fecha: new Date(reporte.fecha),
-      fechaReporte: new Date(reporte.fechaReporte),
-      fechaAfectacion: new Date(reporte.fechaAfectacion),
-      historial: reporte.historial.map((h: any) => ({
-        ...h,
-        fecha: new Date(h.fecha)
-      }))
-    }))
-  } catch (error) {
-    console.error('Error al cargar reportes:', error)
-    return reportesEjemplo
-  }
-}
-
 export function ReportesProvider({ children }: { children: ReactNode }) {
   const [reportes, setReportes] = useState<Reporte[]>([])
 
   useEffect(() => {
-    cargarReportes().then(setReportes)
+    db.get("reportes").then((data: any) => {
+      if (data) {
+        const parsed = JSON.parse(data)
+        const reportesData = parsed.map((reporte: any) => ({
+          ...reporte,
+          fecha: new Date(reporte.fecha),
+          fechaReporte: new Date(reporte.fechaReporte),
+          fechaAfectacion: new Date(reporte.fechaAfectacion),
+          historial: reporte.historial.map((h: any) => ({
+            ...h,
+            fecha: new Date(h.fecha)
+          }))
+        }))
+        setReportes(reportesData)
+      } else {
+        setReportes(reportesEjemplo)
+      }
+    })
   }, [])
 
   useEffect(() => {
     if (reportes.length > 0) {
-      guardarReportes(reportes)
+      db.set("reportes", JSON.stringify(reportes))
     }
   }, [reportes])
 
@@ -74,7 +59,6 @@ export function ReportesProvider({ children }: { children: ReactNode }) {
             descripcion: "Reporte editado",
             camposModificados,
           }
-
           return {
             ...reporte,
             ...reporteActualizado,
