@@ -1,9 +1,11 @@
-
 "use client"
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 import type { Reporte, HistorialCambio } from "@/types"
 import { reportesEjemplo } from "@/data/reportesEjemplo"
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 interface ReportesContextType {
   reportes: Reporte[]
@@ -18,106 +20,71 @@ export function ReportesProvider({ children }: { children: ReactNode }) {
   const [reportes, setReportes] = useState<Reporte[]>([])
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const savedReportes = localStorage.getItem('reportes')
-      if (savedReportes) {
-        const parsed = JSON.parse(savedReportes)
-        const reportesData = parsed.map((reporte: any) => ({
-          ...reporte,
-          fecha: new Date(reporte.fecha),
-          fechaReporte: new Date(reporte.fechaReporte),
-          fechaAfectacion: new Date(reporte.fechaAfectacion),
-          historial: reporte.historial.map((h: any) => ({
-            ...h,
-            fecha: new Date(h.fecha)
-          }))
-        }))
-        setReportes(reportesData)
-      } else {
-        setReportes(reportesEjemplo)
+    async function cargarReportes() {
+      try {
+        const reportesDB = await prisma.reporte.findMany({
+          orderBy: { fecha: 'desc' }
+        })
+        if (reportesDB.length === 0) {
+          // Inicializar con datos de ejemplo si no hay datos
+          await prisma.reporte.createMany({
+            data: reportesEjemplo
+          })
+          setReportes(reportesEjemplo)
+        } else {
+          setReportes(reportesDB as Reporte[])
+        }
+      } catch (error) {
+        console.error("Error cargando reportes:", error)
       }
     }
+    cargarReportes()
   }, [])
 
-  useEffect(() => {
-    if (typeof window !== 'undefined' && reportes.length > 0) {
-      localStorage.setItem('reportes', JSON.stringify(reportes))
+  const agregarReporte = async (reporte: Reporte) => {
+    try {
+      const nuevoReporte = await prisma.reporte.create({
+        data: reporte
+      })
+      setReportes(prev => [nuevoReporte as Reporte, ...prev])
+    } catch (error) {
+      console.error("Error agregando reporte:", error)
     }
-  }, [reportes])
-
-  const agregarReporte = (reporte: Reporte) => {
-    setReportes((prevReportes) => [reporte, ...prevReportes])
   }
 
-  const actualizarReporte = (id: number, reporteActualizado: Partial<Reporte>, camposModificados: string[]) => {
-    setReportes((prevReportes) =>
-      prevReportes.map((reporte) => {
-        if (reporte.id === id) {
-          const nuevoHistorial: HistorialCambio = {
-            fecha: new Date(),
-            descripcion: "Reporte editado",
-            camposModificados,
-          }
-          return {
-            ...reporte,
-            ...reporteActualizado,
-            historial: [...reporte.historial, nuevoHistorial],
-          }
+  const actualizarReporte = async (id: number, reporteActualizado: Partial<Reporte>, camposModificados: string[]) => {
+    try {
+      const reporte = await prisma.reporte.findUnique({ where: { id } })
+      if (!reporte) return
+
+      const nuevoHistorial: HistorialCambio = {
+        fecha: new Date(),
+        descripcion: "Reporte editado",
+        camposModificados,
+      }
+
+      const reporteActualizado = await prisma.reporte.update({
+        where: { id },
+        data: {
+          ...reporteActualizado,
+          historial: [...reporte.historial, nuevoHistorial]
         }
-        return reporte
-      }),
-    )
-  }
+      })
 
-  const eliminarReporte = (id: number) => {
-    setReportes((prevReportes) => prevReportes.filter((reporte) => reporte.id !== id))
-  }
-
-  // Función de prueba
-  const probarBaseDatos = () => {
-    // 1. Agregar un nuevo reporte
-    const nuevoReporte: Reporte = {
-      id: Date.now(),
-      campo: "Campo de Prueba",
-      tipoNovedad: "Mantenimiento",
-      descripcion: "Reporte de prueba",
-      fechaAfectacion: new Date(),
-      unidad: "BOPD",
-      afectacion: 100,
-      fechaReporte: new Date(),
-      fecha: new Date(),
-      operador: "Operador de Prueba",
-      departamento: "Departamento de Prueba",
-      municipio: "Municipio de Prueba",
-      historial: [
-        {
-          fecha: new Date(),
-          descripcion: "Reporte de prueba creado",
-          camposModificados: [],
-        },
-      ],
+      setReportes(prev => prev.map(r => r.id === id ? reporteActualizado as Reporte : r))
+    } catch (error) {
+      console.error("Error actualizando reporte:", error)
     }
-    
-    agregarReporte(nuevoReporte)
-    console.log("✅ Reporte agregado:", nuevoReporte)
-    
-    // 2. Verificar que se guardó en localStorage
-    const datosGuardados = localStorage.getItem('reportes')
-    console.log("✅ Datos en localStorage:", datosGuardados ? JSON.parse(datosGuardados) : null)
-    
-    // 3. Eliminar el reporte de prueba
-    eliminarReporte(nuevoReporte.id)
-    console.log("✅ Reporte eliminado")
-    
-    // 4. Verificar que se actualizó localStorage
-    const datosActualizados = localStorage.getItem('reportes')
-    console.log("✅ Datos actualizados en localStorage:", datosActualizados ? JSON.parse(datosActualizados) : null)
   }
 
-  // Ejecutar prueba al cargar
-  useEffect(() => {
-    probarBaseDatos()
-  }, [])
+  const eliminarReporte = async (id: number) => {
+    try {
+      await prisma.reporte.delete({ where: { id } })
+      setReportes(prev => prev.filter(r => r.id !== id))
+    } catch (error) {
+      console.error("Error eliminando reporte:", error)
+    }
+  }
 
   return (
     <ReportesContext.Provider value={{ reportes, agregarReporte, actualizarReporte, eliminarReporte }}>

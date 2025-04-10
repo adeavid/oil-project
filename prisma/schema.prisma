@@ -1,0 +1,25 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Reporte {
+  id              Int      @id @default(autoincrement())
+  campo           String
+  tipoNovedad     String
+  descripcion     String
+  fechaAfectacion DateTime
+  unidad          String
+  afectacion      Float
+  fechaReporte    DateTime
+  fecha           DateTime @default(now())
+  operador        String
+  departamento    String
+  municipio       String
+  historial       Json[]
+}
