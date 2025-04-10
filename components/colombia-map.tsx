@@ -578,25 +578,33 @@ export default function ColombiaMap({ afectaciones }: ColombiaMapProps) {
                 fillOpacity: 0.6
               })}
               onEachFeature={(feature, layer) => {
+                const reporte = reportes.find(r => r.campo === feature.properties.CAMPO)
                 let popupContent = `
                   <div class="p-2">
                     <h3 class="font-bold">${feature.properties.CAMPO}</h3>
                     <p>Tipo: ${feature.properties.TIPO_HIDRO}</p>
-                    <p>Estado: ${feature.properties.ESTADO_RUTY}</p>
-                    <p>Área: ${feature.properties.AREA_KM2.toFixed(2)} km²</p>
-                    ${(() => {
-                      const reporte = reportes.find(r => r.campo === feature.properties.CAMPO)
-                      return reporte ? 
-                        `<p class="mt-2 font-bold text-red-600">Afectación: ${reporte.afectacion} ${reporte.unidad}</p>
-                         <p class="text-sm">${reporte.descripcion}</p>` 
-                        : ''
-                    })()}
-                    ${feature.properties.AFECTACION ? 
-                      `<p>Afectación: ${feature.properties.AFECTACION} ${feature.properties.UNIDAD}</p>` 
-                      : ''}
+                    <p>Estado: ${feature.properties.ESTADO_RUTY || 'No especificado'}</p>
+                    <p>Área: ${feature.properties.AREA_KM2?.toFixed(2) || 0} km²</p>
+                    ${reporte ? `
+                      <div class="mt-2 p-2 bg-red-50 rounded">
+                        <p class="font-bold text-red-600">Afectación: ${reporte.afectacion} ${reporte.unidad}</p>
+                        <p class="text-sm mt-1">${reporte.descripcion}</p>
+                        <p class="text-xs mt-1 text-gray-600">Fecha: ${new Date(reporte.fechaAfectacion).toLocaleDateString()}</p>
+                      </div>
+                    ` : ''}
                   </div>
                 `
                 layer.bindPopup(popupContent)
+                
+                // Cambiar el estilo si hay afectación
+                if (reporte) {
+                  layer.setStyle({
+                    fillColor: '#ef4444',
+                    fillOpacity: 0.6,
+                    weight: 2,
+                    color: '#b91c1c'
+                  })
+                }
               }}
             />
           )}
